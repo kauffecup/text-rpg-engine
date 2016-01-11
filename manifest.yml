@@ -1,0 +1,12 @@
+applications:
+- buildpack: https://github.com/jthomas/nodejs-v4-buildpack.git
+  services:
+  - text-rpg-cloudant
+  host: text-rpg-server
+  name: text-rpg-server
+  no-route: true
+  command: npm run slack
+  path: .
+  domain: mybluemix.net
+  instances: 1
+  memory: 512M

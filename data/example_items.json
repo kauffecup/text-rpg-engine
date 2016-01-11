@@ -1,0 +1,12 @@
+{
+  "item_example_1": {
+    "name": "Example Item 1",
+    "description": "this is an example item",
+    "choices": ["example item 1", "ei1"]
+  },
+  "item_example_coin": {
+    "name": "Coin",
+    "description": "How many coins can ya get?",
+    "choices": ["coin"]
+  }
+}

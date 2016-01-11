@@ -1,0 +1,11 @@
+extends: airbnb
+env:
+  mocha: true
+rules:
+  no-loop-func: 1
+  no-console: 0
+  no-multi-spaces: 0
+  no-script-url: 1
+  no-use-before-define: 0
+  vars-on-top: 0
+  new-cap: 0

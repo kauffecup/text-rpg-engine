@@ -1,0 +1,11 @@
+{
+  "door_example_01_02": {
+    "description": "example door 1",
+    "areas": ["area_example_01", "area_example_02"],
+    "choices": ["example door 1", "example door one"],
+    "locked": 1,
+    "key": "key_example_01_02",
+    "doorLockedText": "Oh noes it's a custom locked message!",
+    "doorOpenText": "You opened it with a custom message!"
+  }
+}

@@ -1,0 +1,7 @@
+{
+  "key_test_01_02": {
+    "name": "test key 1",
+    "description": "the first test key",
+    "choices": ["test key 1", "tk1"]
+  }
+}

@@ -1,0 +1,6 @@
+coverage
+ENV_VARS.json
+node_modules
+npm-debug.log
+saveData
+VCAP_SERVICES.json

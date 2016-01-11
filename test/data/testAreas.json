@@ -1,0 +1,55 @@
+{
+  "area_test_01": {
+    "description": "Test 01",
+    "dialogue": {
+      "progress": 0,
+      "conversation": [{
+        "description": "test 01 conversation 01",
+        "helpText": "test 01 help 01",
+        "choices": ["one", "1"]
+      }, {
+        "description": "test 01 conversation 02",
+        "helpText": "test 01 help 02",
+        "choices": ["two", "2"]
+      }, {
+        "description": "test 01 conversation 03",
+        "helpText": "test 01 help 03",
+        "choices": ["three", "3"],
+        "completeDrops": {
+          "key_test_01_02": 1
+        }
+      }],
+      "completeText": "test 01 complete",
+      "completeHelp": "test 01 complete help",
+    },
+    "doors": ["door_01_02"],
+    "inventory": {
+      "items": {
+        "item_test_1": 2
+      }
+    }
+  },
+  "area_test_02": {
+    "description": "Test 02",
+    "dialogue": {
+      "progress": 0,
+      "conversation": [{
+        "description": "test 02 conversation 01",
+        "helpText": "test 02 help 01",
+        "choices": ["one", "1"]
+      }, {
+        "description": "test 02 conversation 02",
+        "helpText": "test 02 help 02",
+        "choices": ["two", "2"]
+      }],
+      "completeText": "test 02 complete",
+      "completeHelp": "test 02 complete help"
+    },
+    "doors": ["door_01_02"],
+    "inventory": {
+      "items": {
+        "item_test_2": 2
+      }
+    }
+  }
+}

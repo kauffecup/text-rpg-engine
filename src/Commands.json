@@ -1,0 +1,16 @@
+{
+  "clearSave": ["clear save"],
+  "close": ["close", "shut"],
+  "drop": ["drop item", "put down", "drop", "lose", "ditch", "let go of item", "release"],
+  "groupInventory": ["group inventory", "group items", "party inventory", "party items", "what do we have", "who has the item", "group backpack"],
+  "help": ["help"],
+  "inventory": ["inventory", "check inventory", "items", "what do i have", "backpack", "what’s in my pocket"],
+  "location": ["where am i", "where are we", "where is this", "where the hill are we"],
+  "look": ["look", "what's here", "peer", "observe"],
+  "lookAround": ["look around, look around"],
+  "open": ["open"],
+  "pickup": ["pickup", "pick up", "take", "grab", "loot"],
+  "repeat": ["repeat", "remind", "say what"],
+  "traverse": ["walk through", "go through", "enter", "travel through"],
+  "unlock": ["unlock"]
+}

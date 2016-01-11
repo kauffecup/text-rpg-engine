@@ -1,0 +1,6 @@
+node_modules
+npm-debug.log
+SLACK_TOKEN.json
+saveData
+coverage
+VCAP_SERVICES.json
