@@ -1,11 +1,6 @@
 import game          from './Game';
 import EntityManager from './EntityManager';
 import State         from './State';
-// our game data files
-import items from '../data/items.json';
-import areas from '../data/areas.json';
-import doors from '../data/doors.json';
-import keys  from '../data/keys.json';
 
 let entityManager;
 let gameState;
@@ -14,7 +9,7 @@ let gameState;
  * When using, you must initialize before calling the default main function.
  * For example:
  *   import main, {initialize} from 'main';
- *   initialize(saveFunc, loadFunc).then(() => {
+ *   initialize(saveFunc, loadFunc, clearSaveFunc, entityProm).then(() => {
  *     user.on('input', text => main(text, user, respondFunc));
  *   });
  */
@@ -33,16 +28,21 @@ export default (input, userObj, respond) => {
  * Save and load are functions that return promises. Save returns a promise
  * when it's done saving and load returns a promise that resolves with the
  * save data. Returns a promise tracking the load progress.
+ *
+ * entityProm is a promise that resolves with JSON objects that are to be loaded
+ * into the EntityManager.
  */
-export const initialize = (save, load, clearSave) => {
-  /** Initialize the entity manager with the items and areas and doors etc */
-  entityManager = new EntityManager();
-  entityManager.load('items', items);
-  entityManager.load('areas', areas);
-  entityManager.load('doors', doors);
-  entityManager.load('keys', keys);
+export const initialize = (save, load, clearSave, entityProm) => {
+  return entityProm.then(({items, areas, doors, keys}) => {
+    /** Initialize the entity manager with the items and areas and doors etc */
+    entityManager = new EntityManager();
+    entityManager.load('items', items);
+    entityManager.load('areas', areas);
+    entityManager.load('doors', doors);
+    entityManager.load('keys', keys);
 
-  /** Load previous save data and intialize state object */
-  gameState = new State({ entityManager, save, load, clearSave });
-  return gameState.load();
+    /** Load previous save data and intialize state object */
+    gameState = new State({ entityManager, save, load, clearSave });
+    return gameState.load();
+  });
 };

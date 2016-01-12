@@ -78,6 +78,9 @@ Areas are where the meat happens. Here's a rather complicated example:
 All the "stock" strings used in the game are described in `src/Strings.json`,
 and all acceptable commands are defined in `src/Commands.json`.
 
+Everything with a `choices` array uses the regex under `src/helpers/createRegex`
+- even the commands.
+
 ## Code Structure
 
 ### `Game`
@@ -149,11 +152,13 @@ functions:
     `_id, description, name, isAdmin` that describes the user whose input we're
     sending to the game. `respond` is a function that takes `text` to output,
     and can be used however the adapter deems necessary.
-  - `initialize(save, load, clearSave)`: these are three functions that either,
-    well, save, load, or clear the save data. Save takes an object that has
-    four keys: `players` - an array of player data, `doors` - an array of door
-    data, `areas` - an array of area data, and `currentArea` - a string
-    representing the current area's id.
+  - `initialize(save, load, clearSave, entityProm)`: these are three functions
+    that either, well, save, load, or clear the save data. Save takes an object
+    that has four keys: `players` - an array of player data, `doors` - an array
+    of door data, `areas` - an array of area data, and `currentArea` - a string
+    representing the current area's id. `entityProm` is a bit more fun - it's a
+    promise that resolves with an object containing areas, items, keys, and
+    doors.
 
 This allows adapters to be extremely customized. They must implement:
 
@@ -162,13 +167,14 @@ This allows adapters to be extremely customized. They must implement:
   - a function for outputting text (`respond`). if we're running via a terminal,
     this would be your basic standard out, if we're running in a chat client,
     it would be that client's send method.
+  - a way to load in the default game data (areas, items, keys, and doors)
   - functions for saving, loading, and clearing save data
 
 ### Implementing an Adapter
 
 ```js
 import main, {initialize} from 'main';
-initialize(saveFunc, loadFunc).then(() => {
+initialize(saveFunc, loadFunc, clearSaveFunc, entityProm).then(() => {
  user.on('input', text => main(text, user, respondFunc));
 });
 ```
@@ -177,9 +183,14 @@ initialize(saveFunc, loadFunc).then(() => {
 
 There are two adapters already implemented in this repo:
 
-  - `./localAdapter.js` - runs locally in your command prompt
-  - `./slackAdapter.js` - runs as a Slack bot and is configured via environment
+  - `./adapterLocal.js` - runs locally in your command prompt
+  - `./adapterSlack.js` - runs as a Slack bot and is configured via environment
     variables.
+
+There are two `loadData`-ers - `./loadDataLocal.js` and `./loadDataDropbox.js`,
+showing examples of how to load data into the game. The local one just reads in
+the JSON files from the `./data` directory and the dropbox one, well, reads them
+from dropbox.
 
 There are also two "savers" - `./saveLocal` and `./saveCloudant` that implement
 and export the three save functions. This way both the local and slack adapters
@@ -211,6 +222,32 @@ To lint:
 ```sh
 npm run lint
 ```
+
+## Environment Variables
+
+The `./env` module abstracts out the difference between running locally and
+running in da cloud (currently only configured for Bluemix). If you're purely
+running locally (using `./adapterLocal` with `./loadDataLocal` and
+`./saveLocal`), then you don't need to set any environment variables.
+
+When running locally with fun things, just make a `ENV_VARS.json` file in the
+main directory. It takes key value pairs so that will be read by the app.
+
+If you're using the `adapterSlack`, you need to set:
+
+  - `SLACK_ADMINS`: an array of user ids that can perform admin game functions
+  - `SLACK_CHANNEL_ID`: the channel id you want to limit the bot to playing in
+  - `SLACK_TOKEN`: your bot's slack token
+
+If you're using the `loadDataDropbox`, you need to set:
+
+  - `DROPBOX_ACCESS_TOKEN`: an access token for a dropbox account containing the
+    game files you need
+  - `DROPBOX_KEY`: your bots dropbox key
+  - `DROPBOX_SECRET`: your bots dropbox secret
+
+If you're using `saveCloudant`, you need to create a `VCAP_SERVICES.json` file
+in the main directory and just copy+pasta your vcap services from Bluemix.
 
 ## Running on Bluemix
 

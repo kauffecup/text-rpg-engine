@@ -1,7 +1,7 @@
 import { createInterface }  from 'readline';
 import main, { initialize } from './src/main';
-import loadData             from './loadDataDropbox';
-import { save, load, clearSave } from './saveCloudant';
+import loadData             from './loadDataLocal';
+import { save, load, clearSave } from './saveLocal';
 
 /** Our read line object */
 const rl = createInterface({

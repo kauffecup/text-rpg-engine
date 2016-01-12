@@ -1,5 +1,5 @@
 {
-  "area_example_01": {
+  "area_01": {
     "description": "example 01",
     "dialogue": {
       "progress": 0,
@@ -20,7 +20,7 @@
         }
       }],
       "completeText": "example 01 complete",
-      "completeHelp": "example 01 complete help",
+      "completeHelp": "example 01 complete help"
     },
     "doors": ["door_01_02"],
     "inventory": {
@@ -29,7 +29,7 @@
       }
     }
   },
-  "area_example_02": {
+  "area_02": {
     "description": "example 02",
     "dialogue": {
       "progress": 0,

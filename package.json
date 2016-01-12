@@ -14,6 +14,7 @@
     "bluebird": "^3.1.1",
     "clone": "^1.0.2",
     "cloudant": "^1.4.0",
+    "dropbox": "^0.10.3",
     "slack-client": "^1.5.1",
     "string": "^3.3.1"
   },

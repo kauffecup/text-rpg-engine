@@ -20,7 +20,7 @@
         }
       }],
       "completeText": "test 01 complete",
-      "completeHelp": "test 01 complete help",
+      "completeHelp": "test 01 complete help"
     },
     "doors": ["door_01_02"],
     "inventory": {

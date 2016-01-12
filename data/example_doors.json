@@ -1,7 +1,7 @@
 {
-  "door_example_01_02": {
+  "door_01_02": {
     "description": "example door 1",
-    "areas": ["area_example_01", "area_example_02"],
+    "areas": ["area_01", "area_02"],
     "choices": ["example door 1", "example door one"],
     "locked": 1,
     "key": "key_example_01_02",

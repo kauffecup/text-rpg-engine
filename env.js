@@ -5,6 +5,7 @@
  */
 
 const envVars = {
+  DROPBOX_ACCESS_TOKEN: process.env.DROPBOX_ACCESS_TOKEN,
   DROPBOX_KEY: process.env.DROPBOX_KEY,
   DROPBOX_SECRET: process.env.DROPBOX_SECRET,
   SLACK_ADMINS: process.env.SLACK_ADMINS ? JSON.parse(process.env.SLACK_ADMINS) : null,
@@ -14,6 +15,7 @@ const envVars = {
 
 try {
   const envVarsJSON = require('./ENV_VARS.json');
+  envVars.DROPBOX_ACCESS_TOKEN = envVars.DROPBOX_ACCESS_TOKEN || envVarsJSON.DROPBOX_ACCESS_TOKEN;
   envVars.DROPBOX_KEY = envVars.DROPBOX_KEY || envVarsJSON.DROPBOX_KEY;
   envVars.DROPBOX_SECRET = envVars.DROPBOX_SECRET || envVarsJSON.DROPBOX_SECRET;
   envVars.SLACK_ADMINS = envVars.SLACK_ADMINS || envVarsJSON.SLACK_ADMINS;
