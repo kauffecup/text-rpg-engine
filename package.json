@@ -3,8 +3,8 @@
   "version": "0.0.1",
   "private": true,
   "scripts": {
-    "start": "babel-node ./adapterLocal.js",
-    "slack": "babel-node ./adapterSlack.js",
+    "start": "babel-node ./adapters/adapterLocal.js",
+    "slack": "babel-node ./adapters/adapterSlack.js",
     "test": "istanbul cover _mocha -- --recursive --compilers js:babel-core/register",
     "lint": "eslint --ignore-path .gitignore .",
     "pretest": "npm run lint"

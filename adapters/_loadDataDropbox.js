@@ -1,5 +1,5 @@
 import Dropbox       from 'dropbox';
-import env           from './env';
+import env           from '../env';
 import Promise       from 'bluebird';
 
 export default () => {

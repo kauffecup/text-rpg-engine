@@ -1,7 +1,8 @@
 import Slack                from 'slack-client';
-import main, { initialize } from './src/main';
-import env                  from './env';
-import { save, load, clearSave } from './saveCloudant';
+import main, { initialize } from '../src/main';
+import env                  from '../env';
+import loadData             from './_loadDataDropbox';
+import { save, load, clearSave } from './_saveCloudant';
 
 // Automatically reconnect after an error response from Slack
 const AUTO_RECCONECT = true;
@@ -9,7 +10,7 @@ const AUTO_RECCONECT = true;
 const AUTO_MARK = true;
 
 /** Initialize the game */
-initialize(save, load, clearSave).then(() => {
+initialize(save, load, clearSave, loadData()).then(() => {
   // initialize slack
   const slack = new Slack(env.SLACK_TOKEN, AUTO_RECCONECT, AUTO_MARK);
   // Once everything's good to go, set up our event listener and get started

@@ -183,19 +183,20 @@ initialize(saveFunc, loadFunc, clearSaveFunc, entityProm).then(() => {
 
 There are two adapters already implemented in this repo:
 
-  - `./adapterLocal.js` - runs locally in your command prompt
-  - `./adapterSlack.js` - runs as a Slack bot and is configured via environment
+  - `./adapters/adapterLocal.js` - runs locally in your command prompt
+  - `./adapters/adapterSlack.js` - runs as a Slack bot and is configured via environment
     variables.
 
-There are two `loadData`-ers - `./loadDataLocal.js` and `./loadDataDropbox.js`,
-showing examples of how to load data into the game. The local one just reads in
-the JSON files from the `./data` directory and the dropbox one, well, reads them
-from dropbox.
+There are two `loadData`-ers - `./adapters/_loadDataLocal.js` and
+`./adapters/_loadDataDropbox.js`, showing examples of how to load data into the
+game. The local one just reads in the JSON files from the `./data` directory and
+the dropbox one, well, reads them from dropbox.
 
-There are also two "savers" - `./saveLocal` and `./saveCloudant` that implement
-and export the three save functions. This way both the local and slack adapters
-can share these. `./saveLocal` creates 4 json files in a `./saveData` directory,
-and `./saveCloudant` saves everything in a Cloudant database.
+There are also two "savers" - `./adapters/_saveLocal` and
+`./adapters/_saveCloudant` that implement and export the three save functions.
+This way both the local and slack adapters can share these.
+`./adapters/_saveLocal` creates 4 json files in a `saveData` directory, and
+`./adapters/_saveCloudant` saves everything in a Cloudant database.s
 
 ## Running and Testing
 
@@ -227,8 +228,8 @@ npm run lint
 
 The `./env` module abstracts out the difference between running locally and
 running in da cloud (currently only configured for Bluemix). If you're purely
-running locally (using `./adapterLocal` with `./loadDataLocal` and
-`./saveLocal`), then you don't need to set any environment variables.
+running locally (using `adapterLocal` with `_loadDataLocal` and `_saveLocal`),
+then you don't need to set any environment variables.
 
 When running locally with fun things, just make a `ENV_VARS.json` file in the
 main directory. It takes key value pairs so that will be read by the app.
@@ -239,14 +240,14 @@ If you're using the `adapterSlack`, you need to set:
   - `SLACK_CHANNEL_ID`: the channel id you want to limit the bot to playing in
   - `SLACK_TOKEN`: your bot's slack token
 
-If you're using the `loadDataDropbox`, you need to set:
+If you're using the `_loadDataDropbox`, you need to set:
 
   - `DROPBOX_ACCESS_TOKEN`: an access token for a dropbox account containing the
     game files you need
   - `DROPBOX_KEY`: your bots dropbox key
   - `DROPBOX_SECRET`: your bots dropbox secret
 
-If you're using `saveCloudant`, you need to create a `VCAP_SERVICES.json` file
+If you're using `_saveCloudant`, you need to create a `VCAP_SERVICES.json` file
 in the main directory and just copy+pasta your vcap services from Bluemix.
 
 ## Running on Bluemix

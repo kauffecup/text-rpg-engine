@@ -4,10 +4,10 @@ import path    from 'path';
 import del     from 'del';
 
 /** Helper constants for our save data */
-const AREA_PATH = './saveData/saved_areas.json';
-const DOOR_PATH = './saveData/saved_doors.json';
-const PLAYER_PATH = './saveData/saved_players.json';
-const CURRENT_AREA_PATH = './saveData/saved_current_area.json';
+const AREA_PATH = '../saveData/saved_areas.json';
+const DOOR_PATH = '../saveData/saved_doors.json';
+const PLAYER_PATH = '../saveData/saved_players.json';
+const CURRENT_AREA_PATH = '../saveData/saved_current_area.json';
 
 /** When loading, load areas, doors, and players */
 export const load = () => {
@@ -33,7 +33,7 @@ export const load = () => {
 export const save = ({players, doors, areas, currentArea}) => {
   // Make sure the saveData directory exists
   try {
-    fs.mkdirSync(path.resolve(__dirname, './saveData'));
+    fs.mkdirSync(path.resolve(__dirname, '../saveData'));
   } catch(e) {} // eslint-disable-line
   return Promise.join(
     _write(AREA_PATH, areas),

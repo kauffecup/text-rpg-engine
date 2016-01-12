@@ -1,6 +1,6 @@
 import Cloudant from 'cloudant';
 import Promise  from 'bluebird';
-import env      from './env';
+import env      from '../env';
 
 /** A promisified, initialized cloudant client object */
 const cloudant = Promise.promisifyAll(Cloudant(env.CLOUDANT_URL).use(env.CLOUDANT_DB_NAME));

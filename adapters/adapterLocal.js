@@ -1,7 +1,7 @@
 import { createInterface }  from 'readline';
-import main, { initialize } from './src/main';
-import loadData             from './loadDataLocal';
-import { save, load, clearSave } from './saveLocal';
+import main, { initialize } from '../src/main';
+import loadData             from './_loadDataLocal';
+import { save, load, clearSave } from './_saveLocal';
 
 /** Our read line object */
 const rl = createInterface({
