@@ -117,8 +117,8 @@ and has methods for adding/removing.
 ### `State`
 
 This class maintains the gameState. It keeps track of the visited areas, the
-current areas, the players, and all fun things like that. It uses the `load`,
-`save`, and `clearSave` methods passed in from the adapter.
+current areas, the players, and all fun things like that. It uses the `loadProm`,
+`save`, `clearSave`, and `entityProm` methods passed in from the adapter.
 
 ### `Area`
 
@@ -152,13 +152,14 @@ functions:
     `_id, description, name, isAdmin` that describes the user whose input we're
     sending to the game. `respond` is a function that takes `text` to output,
     and can be used however the adapter deems necessary.
-  - `initialize(save, load, clearSave, entityProm)`: these are three functions
-    that either, well, save, load, or clear the save data. Save takes an object
-    that has four keys: `players` - an array of player data, `doors` - an array
-    of door data, `areas` - an array of area data, and `currentArea` - a string
-    representing the current area's id. `entityProm` is a bit more fun - it's a
-    promise that resolves with an object containing areas, items, keys, and
-    doors.
+  - `initialize(save, loadProm, clearSave, entityProm)`: these are two functions
+    and two promises that save, load, or clear the save data. Save takes an
+    object that has four keys: `players` - an array of player data, `doors` - an
+    array of door data, `areas` - an array of area data, and `currentArea` - a
+    string representing the current area's id. `loadProm` and `entityProm` are a
+    bit more fun - they're promises that resolves with either load data (the
+    same object as the argument of save) or game data (an object containing
+    areas, items, keys, and doors).
 
 This allows adapters to be extremely customized. They must implement:
 
@@ -174,7 +175,7 @@ This allows adapters to be extremely customized. They must implement:
 
 ```js
 import main, {initialize} from 'main';
-initialize(saveFunc, loadFunc, clearSaveFunc, entityProm).then(() => {
+initialize(saveFunc, loadProm, clearSaveFunc, entityProm).then(() => {
  user.on('input', text => main(text, user, respondFunc));
 });
 ```
@@ -184,8 +185,8 @@ initialize(saveFunc, loadFunc, clearSaveFunc, entityProm).then(() => {
 There are two adapters already implemented in this repo:
 
   - `./adapters/adapterLocal.js` - runs locally in your command prompt
-  - `./adapters/adapterSlack.js` - runs as a Slack bot and is configured via environment
-    variables.
+  - `./adapters/adapterSlack.js` - runs as a Slack bot and is configured via
+    environment variables.
 
 There are two `loadData`-ers - `./adapters/_loadDataLocal.js` and
 `./adapters/_loadDataDropbox.js`, showing examples of how to load data into the

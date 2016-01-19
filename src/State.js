@@ -12,7 +12,7 @@ export default class State {
     // these functions are passed in from the adapter. this way each adapter
     // can maintain its own way of saving data
     this._save = props.save;
-    this._load = props.load;
+    this._loadProm = props.loadProm;
     this._clearSave = props.clearSave;
   }
 
@@ -77,7 +77,7 @@ export default class State {
 
   /** Extract the load data from the method passed in during construction and update existing entities */
   load() {
-    return this._load().then(({players = [], doors = [], areas = [], currentArea}) => {
+    return this._loadProm.then(({players = [], doors = [], areas = [], currentArea}) => {
       /** load players */
       for (const playerJSON of players) {
         this.entityManager.loadPlayer(playerJSON);

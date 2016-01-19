@@ -21,7 +21,7 @@ const userObj = {
 const respond = text => console.log('>>> ' + text);
 
 /** Initialize the game */
-initialize(save, load, clearSave, loadData()).then(() => {
+initialize(save, load(), clearSave, loadData()).then(() => {
   /** Once everything's good to go, set up our event listener and get started */
   rl.on('line', line => main(line, userObj, respond));
   main('', userObj, respond);

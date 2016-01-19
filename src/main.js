@@ -25,14 +25,16 @@ export default (input, userObj, respond) => {
 };
 
 /**
- * Save and load are functions that return promises. Save returns a promise
- * when it's done saving and load returns a promise that resolves with the
- * save data. Returns a promise tracking the load progress.
+ * Save returns a promise when it's done saving.
+ * loadProm is a promise that resolves with load data.
+ * clearSave is a function that will clear the save data.
+ * entityProm is a promise that resolves with game data.
+ * Returns a promise tracking the load progress.
  *
  * entityProm is a promise that resolves with JSON objects that are to be loaded
  * into the EntityManager.
  */
-export const initialize = (save, load, clearSave, entityProm) => {
+export const initialize = (save, loadProm, clearSave, entityProm) => {
   return entityProm.then(({items, areas, doors, keys}) => {
     /** Initialize the entity manager with the items and areas and doors etc */
     entityManager = new EntityManager();
@@ -42,7 +44,7 @@ export const initialize = (save, load, clearSave, entityProm) => {
     entityManager.load('keys', keys);
 
     /** Load previous save data and intialize state object */
-    gameState = new State({ entityManager, save, load, clearSave });
+    gameState = new State({ entityManager, save, loadProm, clearSave });
     return gameState.load();
   });
 };
