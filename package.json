@@ -3,8 +3,9 @@
   "version": "0.0.1",
   "private": true,
   "scripts": {
-    "start": "babel-node ./adapters/adapterLocal.js",
+    "local": "babel-node ./adapters/adapterLocal.js",
     "slack": "babel-node ./adapters/adapterSlack.js",
+    "nodered": "node-red -v --settings adapters/adapterNodeRed.js",
     "test": "istanbul cover _mocha -- --recursive --compilers js:babel-core/register",
     "lint": "eslint --ignore-path .gitignore .",
     "pretest": "npm run lint"
@@ -15,6 +16,7 @@
     "clone": "^1.0.2",
     "cloudant": "^1.4.0",
     "dropbox": "^0.10.3",
+    "node-red": "^0.13.0",
     "slack-client": "^1.5.1",
     "string": "^3.3.1"
   },

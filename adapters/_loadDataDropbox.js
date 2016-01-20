@@ -1,16 +1,16 @@
-import Dropbox       from 'dropbox';
-import env           from '../env';
-import Promise       from 'bluebird';
+import Dropbox  from 'dropbox';
+import env      from '../env';
+import Promise  from 'bluebird';
+
+// step 1 authenticate and log in
+const dropboxClient = Promise.promisifyAll(new Dropbox.Client({
+  key: env.DROPBOX_KEY,
+  secret: env.DROPBOX_SECRET,
+}));
+dropboxClient.authDriver(new Dropbox.AuthDriver.NodeServer(8191));
+dropboxClient.setCredentials({token: env.DROPBOX_ACCESS_TOKEN});
 
 export default () => {
-  // step 1 authenticate and log in
-  const dropboxClient = Promise.promisifyAll(new Dropbox.Client({
-    key: env.DROPBOX_KEY,
-    secret: env.DROPBOX_SECRET,
-  }));
-  dropboxClient.authDriver(new Dropbox.AuthDriver.NodeServer(8191));
-  dropboxClient.setCredentials({token: env.DROPBOX_ACCESS_TOKEN});
-
   // step 2, read in the json files and parse them
   return dropboxClient.authenticateAsync({interactive: false}).then(client =>
     Promise.join(
