@@ -8,7 +8,6 @@ const INVENTORY_REGEX = createRegex(commands.inventory, false);
 const GROUP_INVENTORY_REGEX = createRegex(commands.groupInventory, false);
 const LOOK_AROUND_REGEX = createRegex(commands.lookAround, false);
 const INSPECT_REGEX = createRegex(commands.inspect, true);
-const LOOK_REGEX = createRegex(commands.look, false);
 const LOCATION_REGEX = createRegex(commands.location, false);
 const PICKUP_REGEX = createRegex(commands.pickup, true);
 const DROP_REGEX = createRegex(commands.drop, true);
@@ -53,7 +52,6 @@ export default (input, userObj, respond, entityManager, gameState) => {
   // yo where am i yo what's that yo we won
   } else if (INSPECT_REGEX.test(input)) {
     const entityAttempt = INSPECT_REGEX.exec(input)[1];
-    respond(entityAttempt);
     const matchedItemId = currentArea.matchItem(entityAttempt);
     _handleInspect(matchedItemId, entityAttempt, entityManager, respond);
   } else if (LOCATION_REGEX.test(input)) {
@@ -61,7 +59,6 @@ export default (input, userObj, respond, entityManager, gameState) => {
   // attempt picking up an item
   } else if (PICKUP_REGEX.test(input)) {
     const entityAttempt = PICKUP_REGEX.exec(input)[1];
-    respond(entityAttempt);
     const matchedItemID = currentArea.matchItem(entityAttempt);
     _handleItemPickup(matchedItemID, entityAttempt, entityManager, player, currentArea, respond);
   // drop an item
