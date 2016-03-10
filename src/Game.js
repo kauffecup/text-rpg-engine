@@ -151,7 +151,7 @@ const _handleItemDrop = (itemID, entityAttempt, entityManager, player, currentAr
 
 /** Handles look command, either looking at an item/door or at the area in general */
 const _handleInspect = (itemID, entityAttempt, entityManager, respond) => {
-  if(itemID) {
+  if (itemID) {
     respond(entityManager.get(itemID).description);
   } else {
     respond(S(strings.unrecognizedText).template({textString: entityAttempt}).s);
