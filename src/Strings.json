@@ -22,5 +22,6 @@
   "openSuccess": "Successfully opened {{doorName}}",
   "pickupSuccess": "Successfully picked up {{itemName}}",
   "unlockFailed": "Dang, you couldn’t unlock it! Try using a better key, or perhaps someone else has the right one.",
-  "unlockSuccess": "Successfully unlocked {{doorName}} using {{keyName}}"
+  "unlockSuccess": "Successfully unlocked {{doorName}} using {{keyName}}",
+  "unrecognizedText": "I'm sorry, I don't recognize {{textString}}"
 }

@@ -15,7 +15,7 @@ export default class _EntityWithInventory extends _Entity {
     });
   }
 
-  /** Return the ID of an item that matches the given input */
+  /** Return the ID of an item that matches the given input, or nothing if no match is found*/
   matchItem(input) {
     const itemIDs = this.inventory.getIDs();
     for (const itemID of itemIDs) {

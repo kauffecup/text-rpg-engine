@@ -3,6 +3,7 @@
     "description": "example door 1",
     "areas": ["area_01", "area_02"],
     "choices": ["example door 1", "example door one"],
+    "aliases": ["example door 1", "example door one"],
     "locked": 1,
     "key": "key_example_01_02",
     "doorLockedText": "Oh noes it's a custom locked message!",
