@@ -1,14 +1,14 @@
 import expect               from 'expect';
 import _MatchableEntity from '../../src/entities/_MatchableEntity';
 
-describe('_EntityWithInventory', () => {
+describe('_MatchableEntity', () => {
   let myEntity;
   beforeEach(() => {
-    myEntity = new _MatchableEntity({choices: ['tesla', 'test damon']});
+    myEntity = new _MatchableEntity({aliases: ['tesla', 'test damon']});
   });
 
   it('instantiates choices upon creation', () => {
-    expect(myEntity.choices).toEqual(['tesla', 'test damon']);
+    expect(myEntity.aliases).toEqual(['tesla', 'test damon']);
   });
 
   it('can match user input', () => {

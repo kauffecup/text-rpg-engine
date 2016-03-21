@@ -2,7 +2,6 @@
   "key_example_01_02": {
     "name": "Example key 1",
     "description": "the first example key",
-    "choices": ["example key 1", "ek1"],
     "aliases": ["example key 1", "ek1"]
   }
 }

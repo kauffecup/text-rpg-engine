@@ -7,11 +7,11 @@ import createRegex from '../helpers/createRegex';
 export default class _MatchableEntity extends _Entity {
   constructor(props) {
     super(props);
-    this.choices = props.choices || [];
+    this.aliases = props.aliases || [];
   }
 
   /** For a given input, identify whether or not this door matches */
   match(input) {
-    return createRegex(this.choices, false).test(input);
+    return createRegex(this.aliases, false).test(input);
   }
 }

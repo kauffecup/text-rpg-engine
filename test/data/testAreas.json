@@ -6,15 +6,15 @@
       "conversation": [{
         "description": "test 01 conversation 01",
         "helpText": "test 01 help 01",
-        "choices": ["one", "1"]
+        "aliases": ["one", "1"]
       }, {
         "description": "test 01 conversation 02",
         "helpText": "test 01 help 02",
-        "choices": ["two", "2"]
+        "aliases": ["two", "2"]
       }, {
         "description": "test 01 conversation 03",
         "helpText": "test 01 help 03",
-        "choices": ["three", "3"],
+        "aliases": ["three", "3"],
         "completeDrops": {
           "key_test_01_02": 1
         }
@@ -36,11 +36,11 @@
       "conversation": [{
         "description": "test 02 conversation 01",
         "helpText": "test 02 help 01",
-        "choices": ["one", "1"]
+        "aliases": ["one", "1"]
       }, {
         "description": "test 02 conversation 02",
         "helpText": "test 02 help 02",
-        "choices": ["two", "2"]
+        "aliases": ["two", "2"]
       }],
       "completeText": "test 02 complete",
       "completeHelp": "test 02 complete help"

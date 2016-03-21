@@ -6,17 +6,14 @@
       "conversation": [{
         "description": "example 01 conversation 01",
         "helpText": "example 01 help 01",
-        "choices": ["one", "1"],
         "aliases": ["one", "1"]
       }, {
         "description": "example 01 conversation 02",
         "helpText": "example 01 help 02",
-        "choices": ["two", "2"],
         "aliases": ["two", "2"]
       }, {
         "description": "example 01 conversation 03",
         "helpText": "example 01 help 03",
-        "choices": ["three", "3"],
         "aliases": ["three", "3"],
         "completeDrops": {
           "key_example_01_02": 1
@@ -39,12 +36,10 @@
       "conversation": [{
         "description": "example 02 conversation 01",
         "helpText": "example 02 help 01",
-        "choices": ["one", "1"],
         "aliases": ["one", "1"]
       }, {
         "description": "example 02 conversation 02",
         "helpText": "example 02 help 02",
-        "choices": ["two", "2"],
         "aliases": ["two", "2"]
       }],
       "completeText": "example 02 complete",

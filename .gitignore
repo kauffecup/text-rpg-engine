@@ -5,3 +5,4 @@ npm-debug.log
 saveData
 VCAP_SERVICES.json
 *.backup
+.idea

@@ -2,11 +2,11 @@
   "item_test_1": {
     "name": "Test Item 1",
     "description": "this is a test 1",
-    "choices": ["test item 1", "ti1"]
+    "aliases": ["test item 1", "ti1"]
   },
   "item_test_2": {
     "name": "Test Item 2",
     "description": "this is a test 2",
-    "choices": ["test item 2", "ti2"]
+    "aliases": ["test item 2", "ti2"]
   }
 }

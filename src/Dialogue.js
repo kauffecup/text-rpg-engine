@@ -36,7 +36,7 @@ export default class Dialogue {
    * return true or false depending on if we have received a match.
    */
   execute(input) {
-    return createRegex(this.conversation[this.progress].choices, false).test(input);
+    return createRegex(this.conversation[this.progress].aliases, false).test(input);
   }
 
   /**
