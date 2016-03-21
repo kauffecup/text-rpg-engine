@@ -58,6 +58,10 @@ export default class Dialogue {
     return !!conversation && !!conversation.battle;
   }
 
+  describeBattle() {
+    return this.currentBattle.describe();
+  }
+
   /**
    * Called by the containing Area when we enter a progression that is now a battle
    */

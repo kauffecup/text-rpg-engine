@@ -103,6 +103,9 @@ export default class Area extends _EntityWithInventory {
     if (this.inventory) {
       here += this.inventory.describe();
     }
+    if (this.dialogue.isBattle()) {
+      here += this.dialogue.describeBattle();
+    }
     return here || strings.nothingHere;
   }
 
