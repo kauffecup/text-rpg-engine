@@ -1,4 +1,5 @@
 import createRegex from './helpers/createRegex';
+import Battle from './Battle';
 
 /**
  * A Dialogue class
@@ -9,6 +10,7 @@ export default class Dialogue {
   constructor(props) {
     // described in areas.json:
     this.progress = props.progress;
+    this.entityManager = props.entityManager;
     this.conversation = props.conversation;
     this.completeText = props.completeText;
     this.completeHelp = props.completeHelp;
@@ -35,8 +37,44 @@ export default class Dialogue {
    * When executing the user's input, check against all possible choices and
    * return true or false depending on if we have received a match.
    */
-  execute(input) {
+  execute(input, respond) {
+    if (this.isBattle()) {
+      return this._handleBattle(input, respond);
+    }
     return createRegex(this.conversation[this.progress].aliases, false).test(input);
+  }
+
+  /**
+   * Returns whether or not the current progression point is a battle
+   */
+  isBattle() {
+    const conversation = this.conversation[this.progress];
+    return !!conversation && !!conversation.battle;
+  }
+
+  /**
+   * Called by the containing Area when we enter a progression that is now a battle
+   */
+  startBattle() {
+    this.currentBattle = new Battle(Object.assign({}, this.conversation[this.progress].battle, {
+      entityManager: this.entityManager
+    }));
+    return this.currentBattle.describe();
+  }
+
+  /**
+   * Helper method for executing battle input
+   */
+  _handleBattle(input, respond) {
+    if (!this.currentBattle) {
+      respond(this.startBattle());
+      return false;
+    }
+    const battleComplete = this.currentBattle.execute(input, respond);
+    if (battleComplete) {
+      delete this.currentBattle;
+    }
+    return battleComplete;
   }
 
   /**

@@ -38,9 +38,27 @@
         "helpText": "example 02 help 01",
         "aliases": ["one", "1"]
       }, {
+        "battle": {
+          "monsters": {
+            "monster_example_01": 2
+          }
+        },
+        "completeDrops": {
+          "item_example_coin": 10
+        }
+      }, {
         "description": "example 02 conversation 02",
         "helpText": "example 02 help 02",
         "aliases": ["two", "2"]
+      }, {
+        "battle": {
+          "monsters": {
+            "monster_example_02": 1
+          }
+        },
+        "completeDrops": {
+          "item_example_coin": 20
+        }
       }],
       "completeText": "example 02 complete",
       "completeHelp": "example 02 complete help"
