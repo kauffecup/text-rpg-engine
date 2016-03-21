@@ -1,4 +1,8 @@
 import Monster from './entities/Monster';
+import createRegex from './helpers/createRegex';
+import commands from './Commands.json';
+
+const ATTACK_REGEX = createRegex(commands.attack, true);
 
 export default class Battle {
   constructor(props) {
@@ -17,7 +21,26 @@ export default class Battle {
   }
 
   execute(input, respond) {
-    respond(`responding to ${input}`);
+    if (ATTACK_REGEX.test(input)) {
+      const monsterAttempt = ATTACK_REGEX.exec(input)[1];
+      let hit = false;
+      for (let i = 0; i < this.monsters.length && !hit; i++) {
+        const monster = this.monsters[i];
+        if (monster.match(monsterAttempt)) {
+          monster.wound();
+          respond(`successfully hit ${monster.name}`);
+          if (monster.getHP() === 0) {
+            respond(`you killed ${monster.name}`);
+          } else {
+            respond(`HP remaining: ${monster.getHP()}`);
+          }
+          hit = true;
+        }
+      }
+      if (!hit) {
+        respond('swing and a miss!');
+      }
+    }
     return false;
   }
 

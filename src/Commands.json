@@ -1,4 +1,5 @@
 {
+  "attack": ["attack", "hit", "slap", "punch", "kick"],
   "clearSave": ["clear save"],
   "close": ["close", "shut"],
   "drop": ["drop item", "put down", "drop", "lose", "ditch", "let go of", "release"],
