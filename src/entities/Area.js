@@ -72,10 +72,6 @@ export default class Area extends _EntityWithInventory {
               }
             }
           }
-          // if the dialogue is now a battle... start it
-          if (this.dialogue.isBattle()) {
-            respond(this.dialogue.startBattle());
-          }
         // otherwise, see if the user put in text that we want to yell at them for
         } else if (this.dialogue.executeIncorrect(input)) {
           respond(this.dialogue.getIncorrectText());

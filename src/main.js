@@ -35,14 +35,14 @@ export default (input, userObj, respond) => {
  * into the EntityManager.
  */
 export const initialize = (save, loadProm, clearSave, entityProm) => {
-  return entityProm.then(({items, areas, doors, keys}) => {
+  return entityProm.then(({items, areas, doors, keys, monsters}) => {
     /** Initialize the entity manager with the items and areas and doors etc */
     entityManager = new EntityManager();
     entityManager.load('items', items);
     entityManager.load('areas', areas);
     entityManager.load('doors', doors);
     entityManager.load('keys', keys);
-
+    entityManager.load('monsters', monsters, true);
     /** Load previous save data and intialize state object */
     gameState = new State({ entityManager, save, loadProm, clearSave });
     return gameState.load();

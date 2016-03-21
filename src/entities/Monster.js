@@ -9,4 +9,8 @@ export default class Key extends _MatchableEntity {
     this.name = props.name;
     this.hp = props.hp;
   }
+
+  describe() {
+    return `${this.name}\nHP: ${this.hp}\n`;
+  }
 }

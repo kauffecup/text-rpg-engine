@@ -19,10 +19,16 @@ export default class Dialogue {
 
   /**
    * When a dialogue is activated it either returns its current description
-   * or its completed text (if complete)
+   * or its completed text (if complete). If we're activating a battle, return
+   * the text from starting it.
    */
   activate() {
-    return this.isComplete() ? this.completeText : this.conversation[this.progress].description;
+    if (this.isComplete()) {
+      return this.completeText;
+    } else if (this.isBattle()) {
+      return this.startBattle();
+    }
+    return this.conversation[this.progress].description;
   }
 
   /**
