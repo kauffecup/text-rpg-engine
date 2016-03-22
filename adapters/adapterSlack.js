@@ -1,8 +1,8 @@
 import Slack                from 'slack-client';
 import main, { initialize } from '../src/main';
 import env                  from '../env';
-import loadData             from './_loadDataDropbox';
-import { save, load, clearSave } from './_saveCloudant';
+import loadData             from './_loadDataLocal';
+import { save, load, clearSave } from './_saveLocal';
 
 // Automatically reconnect after an error response from Slack
 const AUTO_RECCONECT = true;
@@ -17,10 +17,12 @@ initialize(save, load(), clearSave, loadData()).then(() => {
   slack.on('open', () => {
     console.log(`Connected to ${slack.team.name} as @${slack.self.name}`);
     console.log('potential channels:');
-    for (const channelKey in slack.channels) {
-      if (slack.channels.hasOwnProperty(channelKey)) {
-        const {id, name, is_archived: isArchived, is_channel: isChannel, is_member: isMember} = slack.channels[channelKey];
-        if (!isArchived && isChannel) {
+    const channels = Object.assign({}, slack.channels, slack.groups);
+    // console.log(slack.groups);
+    for (const channelKey in channels) {
+      if (channels.hasOwnProperty(channelKey)) {
+        const {id, name, is_archived: isArchived, is_channel: isChannel, is_group: isGroup, is_member: isMember} = channels[channelKey];
+        if (!isArchived && (isChannel || isGroup)) {
           console.log(`${name}: ${id}  ${isMember ? 'member' : 'not in channel'}`);
         }
       }
@@ -29,7 +31,7 @@ initialize(save, load(), clearSave, loadData()).then(() => {
 
   // when we receive a message pass it on to our main function
   slack.on('message', ({text, user, channel}) => {
-    if (channel === env.CHANNEL_ID) {
+    if (channel === env.SLACK_CHANNEL_ID) {
       const channelObj = slack.getChannelGroupOrDMByID(channel);
       const userObj = slack.getUserByID(user);
       // format our user object to pass into the main function
