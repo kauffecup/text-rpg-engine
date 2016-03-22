@@ -38,6 +38,8 @@
         "helpText": "example 02 help 01",
         "aliases": ["one", "1"]
       }, {
+        "description": "example 02 battle 01",
+        "helpText": "battle 01 help",
         "battle": {
           "monsters": {
             "monster_example_01": 2
@@ -51,6 +53,8 @@
         "helpText": "example 02 help 02",
         "aliases": ["two", "2"]
       }, {
+        "description": "example 02 battle 02",
+        "helpText": "battle 02 help 0",
         "battle": {
           "monsters": {
             "monster_example_02": 1

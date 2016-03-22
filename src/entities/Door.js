@@ -63,12 +63,15 @@ export default class Door extends _MatchableEntity {
 
   /** Return a pretty string describing this door */
   describe() {
+    let status;
     if (this.locked < 0) {
-      return S(strings.doorStatusOpen).template({doorDescription: this.description}).s;
+      status = S(strings.doorStatusOpen).template({doorDescription: this.description}).s;
     } else if (this.locked > 0) {
-      return S(strings.doorStatusLocked).template({doorDescription: this.description}).s;
+      status = S(strings.doorStatusLocked).template({doorDescription: this.description}).s;
+    } else {
+      status = S(strings.doorStatusClosed).template({doorDescription: this.description}).s;
     }
-    return S(strings.doorStatusClosed).template({doorDescription: this.description}).s;
+    return this.name + ( status ? ': ' + status : '');
   }
 
   /** Only need to save the things the user can mutate - locked state */

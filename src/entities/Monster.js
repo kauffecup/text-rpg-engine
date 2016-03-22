@@ -25,6 +25,6 @@ export default class Key extends _MatchableEntity {
   }
 
   describe() {
-    return `${this.name}\nHP: ${this.hp}\n`;
+    return `${this.name}: _${this.description}_\nHP: ${this.hp}\n`;
   }
 }

@@ -26,7 +26,7 @@ export default class Dialogue {
     if (this.isComplete()) {
       return this.completeText;
     } else if (this.isBattle()) {
-      return this.startBattle();
+      return `${this.conversation[this.progress].description}\n${this.startBattle()}`;
     }
     return this.conversation[this.progress].description;
   }
@@ -69,7 +69,7 @@ export default class Dialogue {
     this.currentBattle = new Battle(Object.assign({}, this.conversation[this.progress].battle, {
       entityManager: this.entityManager
     }));
-    return this.currentBattle.describe();
+    return this.describeBattle();
   }
 
   /**
