@@ -44,7 +44,7 @@
           }
         },
         "completeDrops": {
-          "item_example_coin": 10
+          "item_example_2": 10
         }
       }, {
         "description": "example 02 conversation 02",
@@ -57,7 +57,7 @@
           }
         },
         "completeDrops": {
-          "item_example_coin": 20
+          "item_example_2": 20
         }
       }],
       "completeText": "example 02 complete",

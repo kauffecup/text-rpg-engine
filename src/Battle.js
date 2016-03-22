@@ -23,25 +23,26 @@ export default class Battle {
   execute(input, respond) {
     if (ATTACK_REGEX.test(input)) {
       const monsterAttempt = ATTACK_REGEX.exec(input)[1];
-      let hit = false;
-      for (let i = 0; i < this.monsters.length && !hit; i++) {
+      let found = false;
+      for (let i = 0; i < this.monsters.length && !found; i++) {
         const monster = this.monsters[i];
         if (monster.match(monsterAttempt)) {
           monster.wound();
           respond(`successfully hit ${monster.name}`);
           if (monster.getHP() === 0) {
+            this.monsters.splice(i, 1);
             respond(`you killed ${monster.name}`);
           } else {
             respond(`HP remaining: ${monster.getHP()}`);
           }
-          hit = true;
+          found = true;
         }
       }
-      if (!hit) {
-        respond('swing and a miss!');
+      if (!found) {
+        respond(`no enemy goes by ${input}`);
       }
     }
-    return false;
+    return this.monsters.length === 0;
   }
 
   describe() {

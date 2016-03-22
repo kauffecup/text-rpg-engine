@@ -61,7 +61,6 @@ export default class Area extends _EntityWithInventory {
         if (shouldAdvance) {
           const drops = this.dialogue.getDrops();
           this.dialogue.advanceConversation();
-          respond(this.dialogue.activate());
           // if the dialogue is now complete, and there are drop items, add them
           // to our inventory and notify the user
           if (drops && Object.keys(drops).length) {
@@ -72,6 +71,7 @@ export default class Area extends _EntityWithInventory {
               }
             }
           }
+          respond(this.dialogue.activate());
         // otherwise, see if the user put in text that we want to yell at them for
         } else if (this.dialogue.executeIncorrect(input)) {
           respond(this.dialogue.getIncorrectText());
