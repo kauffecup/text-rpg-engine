@@ -4,6 +4,8 @@ import commands from './Commands.json';
 
 const ATTACK_REGEX = createRegex(commands.attack, true);
 
+const HIT_PROBABILITY = 0.9;
+
 export default class Battle {
   constructor(props) {
     this.entityManager = props.entityManager;
@@ -22,24 +24,31 @@ export default class Battle {
 
   execute(input, respond) {
     if (ATTACK_REGEX.test(input)) {
-      const monsterAttempt = ATTACK_REGEX.exec(input)[1];
-      let found = false;
-      for (let i = 0; i < this.monsters.length && !found; i++) {
-        const monster = this.monsters[i];
-        if (monster.match(monsterAttempt)) {
-          monster.wound();
-          respond(`successfully hit ${monster.name}`);
-          if (monster.getHP() === 0) {
-            this.monsters.splice(i, 1);
-            respond(`you killed ${monster.name}`);
-          } else {
-            respond(`HP remaining: ${monster.getHP()}`);
+      // first let's see if we miss or not
+      // we hit!
+      if (Math.random() < HIT_PROBABILITY) {
+        const monsterAttempt = ATTACK_REGEX.exec(input)[1];
+        let found = false;
+        for (let i = 0; i < this.monsters.length && !found; i++) {
+          const monster = this.monsters[i];
+          if (monster.match(monsterAttempt)) {
+            monster.wound();
+            respond(`successfully hit ${monster.name}`);
+            if (monster.getHP() === 0) {
+              this.monsters.splice(i, 1);
+              respond(`you killed ${monster.name}`);
+            } else {
+              respond(`HP remaining: ${monster.getHP()}`);
+            }
+            found = true;
           }
-          found = true;
         }
-      }
-      if (!found) {
-        respond(`no enemy goes by ${input}`);
+        if (!found) {
+          respond(`no enemy goes by ${input}`);
+        }
+      // oh no! we missed!
+      } else {
+        respond('oh noes! you missed!');
       }
     }
     return this.monsters.length === 0;
