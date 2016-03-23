@@ -2,6 +2,7 @@
   "attack": ["attack", "hit", "slap", "punch", "kick"],
   "clearSave": ["clear save"],
   "close": ["close", "shut"],
+  "dodge": ["dodge"],
   "drop": ["drop item", "put down", "drop", "lose", "ditch", "let go of", "release"],
   "groupInventory": ["group inventory", "group items", "party inventory", "party items", "what do we have", "who has the item", "group backpack"],
   "help": ["help"],

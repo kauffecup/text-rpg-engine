@@ -5,6 +5,8 @@ import Door    from './entities/Door';
 import Key     from './entities/Key';
 import clone   from 'clone';
 
+const DEFAULT_PLAYER_HP = 5;
+
 // TODO: it would be cool to abstract this out somehow
 const _typeMap = {
   items: Item,
@@ -62,7 +64,7 @@ export default class EntityManager {
 
   /** Like load... but for a player, also it returns it. */
   loadPlayer(props) {
-    const newProps = Object.assign({}, props, {
+    const newProps = Object.assign({hp: DEFAULT_PLAYER_HP}, props, {
       entityManager: this,
       type: 'players',
     });

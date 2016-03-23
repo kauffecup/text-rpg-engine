@@ -36,7 +36,7 @@ export default class Area extends _EntityWithInventory {
    * Called with user input and a return function if not intercepted by Game
    * Handles directing text towards either the dialogue, door, or inventory.
    */
-  execute(input, respond, entityIDs = []) {
+  execute(input, respond, player) {
     // the user is asking for halp!
     if (HELP_REGEX.test(input)) {
       respond(this.dialogue.help());
@@ -50,8 +50,9 @@ export default class Area extends _EntityWithInventory {
       // if we've made it here, we will try to progress the dialog if it isn't
       // already complete
       if (!this.dialogue.isComplete()) {
-        let shouldAdvance = this.dialogue.execute(input, respond);
+        let shouldAdvance = this.dialogue.execute(input, respond, player);
         // if the user used the right command (and we're not battling) but doesn't have the correct item, tell them
+        const entityIDs = player.getAllEntities() || [];
         if (shouldAdvance && !this.dialogue.isBattle() && this.dialogue.requiresItem() && !this.dialogue.testItems(entityIDs)) {
           shouldAdvance = false;
           respond(strings.missingSomething);

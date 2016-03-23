@@ -43,9 +43,9 @@ export default class Dialogue {
    * When executing the user's input, check against all possible choices and
    * return true or false depending on if we have received a match.
    */
-  execute(input, respond) {
+  execute(input, respond, player) {
     if (this.isBattle()) {
-      return this._handleBattle(input, respond);
+      return this._handleBattle(input, respond, player);
     }
     return createRegex(this.conversation[this.progress].aliases, false).test(input);
   }
@@ -75,12 +75,12 @@ export default class Dialogue {
   /**
    * Helper method for executing battle input
    */
-  _handleBattle(input, respond) {
+  _handleBattle(input, respond, player) {
     if (!this.currentBattle) {
       respond(this.startBattle());
       return false;
     }
-    const battleComplete = this.currentBattle.execute(input, respond);
+    const battleComplete = this.currentBattle.execute(input, respond, player);
     if (battleComplete) {
       delete this.currentBattle;
     }

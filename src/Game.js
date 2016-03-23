@@ -45,7 +45,7 @@ export default (input, userObj, respond, entityManager, gameState) => {
     _handleGroupInventory(gameState, entityManager, respond);
   // list the current players inventory
   } else if (INVENTORY_REGEX.test(input)) {
-    respond(player.describeInventory());
+    respond(player.describe());
   // #hamilton
   } else if (LOOK_AROUND_REGEX.test(input)) {
     respond(strings.lookAround);
@@ -88,8 +88,7 @@ export default (input, userObj, respond, entityManager, gameState) => {
     _handleTraverse(matchedDoor, doorAttempt, respond, entityManager, currentArea, gameState);
   // if none of these match, delegate the input to the current area
   } else {
-    const entityIDs = player.getAllEntities();
-    currentArea.execute(input, respond, entityIDs);
+    currentArea.execute(input, respond, player);
   }
   gameState.save();
 };
@@ -115,7 +114,7 @@ const _handleGroupInventory = (gameState, entityManager, respond) => {
   for (const playerID of playerIDs) {
     const playerObj = entityManager.get(playerID);
     if (playerObj) {
-      pretty += playerObj.describeInventory() + '\n';
+      pretty += playerObj.describe() + '\n';
     }
   }
   respond(pretty);
