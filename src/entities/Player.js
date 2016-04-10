@@ -68,7 +68,7 @@ export default class Player extends _EntityWithInventory {
   /** Return a pretty string describing this players inventory */
   describe() {
     let pretty = this.name ? `*${this.name} (${this.description})*` : `*${this.description}*`;
-    pretty += `  HP: ${this.hp}\n`;
+    pretty += `  HP: ${this.hp}` + (this.getDodge() ? ' (dodging)\n' : '\n');
     return pretty + (this.inventory.describe() || strings.nothingInventory + '\n');
   }
 

@@ -55,6 +55,7 @@ export default class Battle {
     this.totalHits++;
     const curHits = this.playerHitMap[playerID] || 0;
     this.playerHitMap[playerID] = curHits + 1;
+    let pretty = '';
     // we hit!
     if (Math.random() < PLAYER_HIT_PROBABILITY) {
       const monsterAttempt = ATTACK_REGEX.exec(input)[1];
@@ -62,26 +63,34 @@ export default class Battle {
       for (let i = 0; i < this.monsters.length && !found; i++) {
         const monster = this.monsters[i];
         if (monster.match(monsterAttempt)) {
+          found = true;
           monster.wound();
-          respond(`successfully hit ${monster.name}`);
+          pretty += `successfully hit ${monster.name}.`;
           if (monster.getHP() === 0) {
             if (this.gearingUpMonster && monster._id === this.gearingUpMonster._id) {
               this.gearingUpMonster = null;
             }
             this.monsters.splice(i, 1);
-            respond(`you killed ${monster.name}`);
+            pretty += ` you killed ${monster.name}!`;
           } else {
-            respond(`HP remaining: ${monster.getHP()}`);
+            pretty += ` HP remaining: ${monster.getHP()}`;
           }
-          found = true;
         }
       }
       if (!found) {
-        respond(`no enemy goes by ${monsterAttempt}`);
+        pretty += `no enemy goes by ${monsterAttempt}`;
       }
     // oh no! we missed!
     } else {
-      respond('oh noes! you missed!');
+      pretty += 'oh noes! you missed!';
+    }
+    // the player tried to do something, they aint dodgin no more
+    if (player.getDodge()) {
+      pretty += `\n${player.name} is no longer dodging...`;
+    }
+    player.setDodge(false);
+    if (pretty.length) {
+      respond(pretty);
     }
   }
 
@@ -105,18 +114,22 @@ export default class Battle {
   }
 
   handleStrikeBack(respond) {
+    let pretty = '';
     if (this.gearingUpMonster && this.gearingUpTarget) {
       const player = this.entityManager.get(this.gearingUpTarget);
       if (Math.random() < (player.getDodge() ? MONSTER_HIT_WHILE_PLAYER_DODGE_PROBABILITY : MONSTER_HIT_PROBABILITY)) {
         player.wound();
-        respond(`${this.gearingUpMonster.name} strikes ${this.entityManager.get(this.gearingUpTarget).name}`);
+        pretty += `${this.gearingUpMonster.name} strikes ${this.entityManager.get(this.gearingUpTarget).name}!`;
         if (player.getHP() === 0) {
-          respond(`${player.name} is super dead.`);
+          pretty += ` ${player.name} is super dead.`;
         } else {
-          respond(`HP remaining: ${player.getHP()}`);
+          pretty += ` HP remaining: ${player.getHP()}`;
         }
       } else {
-        respond(`${this.gearingUpMonster.name} missed!`);
+        pretty += `${this.gearingUpMonster.name} missed!`;
+      }
+      if (player.getDodge()) {
+        pretty += `\n${player.name} is no longer dodging...`;
       }
       player.setDodge(false);
       this.gearingUpMonster = null;
@@ -124,7 +137,10 @@ export default class Battle {
     } else {
       this.gearingUpMonster = this.monsters[Math.floor(Math.random() * this.monsters.length)];
       this.gearingUpTarget = this.selectPlayer();
-      respond(`${this.gearingUpMonster.name} is looking at ${this.entityManager.get(this.gearingUpTarget).name}`);
+      pretty += `${this.gearingUpMonster.name} is looking at ${this.entityManager.get(this.gearingUpTarget).name}`;
+    }
+    if (pretty) {
+      respond(pretty);
     }
   }
 
