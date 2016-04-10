@@ -122,6 +122,7 @@ export default class Battle {
         pretty += `${this.gearingUpMonster.name} strikes ${this.entityManager.get(this.gearingUpTarget).name}!`;
         if (player.getHP() === 0) {
           pretty += ` ${player.name} is super dead.`;
+          this.handlePlayerDeath(this.gearingUpTarget);
         } else {
           pretty += ` HP remaining: ${player.getHP()}`;
         }
@@ -141,6 +142,14 @@ export default class Battle {
     }
     if (pretty) {
       respond(pretty);
+    }
+  }
+
+  handlePlayerDeath(playerID) {
+    this.totalHits -= this.playerHitMap[playerID];
+    delete this.playerHitMap[playerID];
+    if (this.gearingUpTarget === playerID) {
+      this.gearingUpTarget = null;
     }
   }
 

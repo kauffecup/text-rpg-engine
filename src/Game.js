@@ -56,16 +56,21 @@ export default (input, userObj, respond, entityManager, gameState) => {
     _handleInspect(matchedItemId, entityAttempt, entityManager, respond);
   } else if (LOCATION_REGEX.test(input)) {
     currentArea.activate(respond);
-  // attempt picking up an item
-  } else if (PICKUP_REGEX.test(input)) {
-    const entityAttempt = PICKUP_REGEX.exec(input)[1];
-    const matchedItemID = currentArea.matchItem(entityAttempt);
-    _handleItemPickup(matchedItemID, entityAttempt, entityManager, player, currentArea, respond);
   // drop an item
   } else if (DROP_REGEX.test(input)) {
     const entityAttempt = DROP_REGEX.exec(input)[1];
     const matchedItemID = player.matchItem(entityAttempt);
     _handleItemDrop(matchedItemID, entityAttempt, entityManager, player, currentArea, respond);
+  // here be a death wish... everything below this line you can't do if you're dead
+  // we leave "drop" above the line to make sure you can pass on inventory stuff
+  // that flow will prolly change later.
+  } else if (player.getHP() <= 0) {
+    respond('You can\'t do anything, silly... you\'re dead!');
+  // attempt picking up an item
+  } else if (PICKUP_REGEX.test(input)) {
+    const entityAttempt = PICKUP_REGEX.exec(input)[1];
+    const matchedItemID = currentArea.matchItem(entityAttempt);
+    _handleItemPickup(matchedItemID, entityAttempt, entityManager, player, currentArea, respond);
   // attempt opening a door
   } else if (OPEN_REGEX.test(input)) {
     const doorAttempt = OPEN_REGEX.exec(input)[1];
