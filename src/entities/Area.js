@@ -17,7 +17,9 @@ export default class Area extends _EntityWithInventory {
   constructor(props) {
     super(props);
     // from areas.json
-    this.dialogue = new Dialogue(props.dialogue);
+    this.dialogue = new Dialogue(Object.assign({}, props.dialogue, {
+      entityManager: this.entityManager,
+    }));
     this.lookText = props.lookText;
     this.doors = props.doors || [];
   }
@@ -34,7 +36,7 @@ export default class Area extends _EntityWithInventory {
    * Called with user input and a return function if not intercepted by Game
    * Handles directing text towards either the dialogue, door, or inventory.
    */
-  execute(input, respond, entityIDs = []) {
+  execute(input, respond, player) {
     // the user is asking for halp!
     if (HELP_REGEX.test(input)) {
       respond(this.dialogue.help());
@@ -48,18 +50,18 @@ export default class Area extends _EntityWithInventory {
       // if we've made it here, we will try to progress the dialog if it isn't
       // already complete
       if (!this.dialogue.isComplete()) {
-        let shouldAdvance = this.dialogue.execute(input);
-        // if the user used the write command but doesn't have the correct item, tell them
-        if (shouldAdvance && this.dialogue.requiresItem() && !this.dialogue.testItems(entityIDs)) {
+        let shouldAdvance = this.dialogue.execute(input, respond, player);
+        // if the user used the right command (and we're not battling) but doesn't have the correct item, tell them
+        const entityIDs = player.getAllEntities() || [];
+        if (shouldAdvance && !this.dialogue.isBattle() && this.dialogue.requiresItem() && !this.dialogue.testItems(entityIDs)) {
           shouldAdvance = false;
           respond(strings.missingSomething);
         }
-        // if we've made it this far, the user has entered the correct command,
-        // and if an item is required... they've got it! advance the conversation.
+        // if we've made it this far, the user has entered the correct command or won the
+        // battle, and if an item is required... they've got it! advance the conversation.
         if (shouldAdvance) {
           const drops = this.dialogue.getDrops();
           this.dialogue.advanceConversation();
-          respond(this.dialogue.activate());
           // if the dialogue is now complete, and there are drop items, add them
           // to our inventory and notify the user
           if (drops && Object.keys(drops).length) {
@@ -70,6 +72,7 @@ export default class Area extends _EntityWithInventory {
               }
             }
           }
+          respond(this.dialogue.activate());
         // otherwise, see if the user put in text that we want to yell at them for
         } else if (this.dialogue.executeIncorrect(input)) {
           respond(this.dialogue.getIncorrectText());
@@ -100,6 +103,9 @@ export default class Area extends _EntityWithInventory {
     }
     if (this.inventory) {
       here += this.inventory.describe();
+    }
+    if (this.dialogue.isBattle()) {
+      here += this.dialogue.describeBattle();
     }
     return here || strings.nothingHere;
   }

@@ -41,6 +41,19 @@
         "description": "test 02 conversation 02",
         "helpText": "test 02 help 02",
         "aliases": ["two", "2"]
+      }, {
+        "description": "test 02 battle 01",
+        "helpText": "battle 01 help 0",
+        "battle": {
+          "speed": 2,
+          "monsters": {
+            "monster_test_01": 1,
+            "monster_test_02": 1
+          }
+        },
+        "completeDrops": {
+          "item_test_2": 20
+        }
       }],
       "completeText": "test 02 complete",
       "completeHelp": "test 02 complete help"

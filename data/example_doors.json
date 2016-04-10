@@ -1,5 +1,6 @@
 {
   "door_01_02": {
+    "name": "Example Door One",
     "description": "example door 1",
     "areas": ["area_01", "area_02"],
     "aliases": ["example door 1", "example door one"],

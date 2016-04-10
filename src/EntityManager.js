@@ -1,9 +1,11 @@
-import Item   from './entities/Item';
-import Area   from './entities/Area';
-import Player from './entities/Player';
-import Door   from './entities/Door';
-import Key    from './entities/Key';
-import clone  from 'clone';
+import Item    from './entities/Item';
+import Area    from './entities/Area';
+import Player  from './entities/Player';
+import Door    from './entities/Door';
+import Key     from './entities/Key';
+import clone   from 'clone';
+
+const DEFAULT_PLAYER_HP = 5;
 
 // TODO: it would be cool to abstract this out somehow
 const _typeMap = {
@@ -40,15 +42,20 @@ export default class EntityManager {
    *   }
    * }
    */
-  load(type, entities) {
+  load(type, entities, delayConstruction) {
     for (const eID in entities) {
       if (entities.hasOwnProperty(eID)) {
-        const constructor = _typeMap[type];
-        const props = entities[eID];
-        props._id = eID;
-        props.type = type;
-        props.entityManager = this;
-        this.entityMap[eID] = new constructor(props);
+        const props = Object.assign({}, entities[eID], {
+          _id: eID,
+          entityManager: this,
+          type,
+        });
+        if (delayConstruction) {
+          this.entityMap[eID] = props;
+        } else {
+          const constructor = _typeMap[type];
+          this.entityMap[eID] = new constructor(props);
+        }
       }
     }
     // store a reference in case we want to wipe the entity manager
@@ -57,10 +64,12 @@ export default class EntityManager {
 
   /** Like load... but for a player, also it returns it. */
   loadPlayer(props) {
-    props.entityManager = this;
-    props.type = 'players';
-    const player = new Player(props);
-    this.entityMap[props._id] = player;
+    const newProps = Object.assign({hp: DEFAULT_PLAYER_HP}, props, {
+      entityManager: this,
+      type: 'players',
+    });
+    const player = new Player(newProps);
+    this.entityMap[newProps._id] = player;
     return player;
   }
 

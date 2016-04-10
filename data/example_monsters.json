@@ -1,0 +1,14 @@
+{
+  "monster_example_01": {
+    "name": "Example Monster 1",
+    "description": "An example monster",
+    "aliases": ["example monster 1", "em1"],
+    "hp": 5
+  },
+  "monster_example_02": {
+    "name": "Example Monster 2",
+    "description": "Another example monster. With more HP!",
+    "aliases": ["example monster 2", "em2"],
+    "hp": 10
+  }
+}

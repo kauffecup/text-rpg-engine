@@ -11,6 +11,8 @@ export default class Player extends _EntityWithInventory {
     this.name = props.name;
     this.oneOfTypeMap = {};
     this.isAdmin = props.isAdmin;
+    this.hp = props.hp;
+    this.dodging = false;
   }
 
   /** Return an array of the keys a player has */
@@ -41,9 +43,32 @@ export default class Player extends _EntityWithInventory {
     return super.removeEntity(entityID, count);
   }
 
+  /**
+   * This monster's been hit!
+   */
+  wound() {
+    this.hp = Math.max(this.hp - 1, 0);
+  }
+
+  /**
+   * Let's make a getter!
+   */
+  getHP() {
+    return this.hp;
+  }
+
+  setDodge(dodge) {
+    this.dodging = dodge;
+  }
+
+  getDodge() {
+    return this.dodging;
+  }
+
   /** Return a pretty string describing this players inventory */
-  describeInventory() {
-    const pretty = this.name ? `*${this.name} (${this.description})*:\n` : `*${this.description}*:\n`;
+  describe() {
+    let pretty = this.name ? `*${this.name} (${this.description})*` : `*${this.description}*`;
+    pretty += `  HP: ${this.hp}` + (this.getDodge() ? ' (dodging)\n' : '\n');
     return pretty + (this.inventory.describe() || strings.nothingInventory + '\n');
   }
 
@@ -53,6 +78,7 @@ export default class Player extends _EntityWithInventory {
       _id: this._id,
       description: this.description,
       name: this.name,
+      hp: this.hp,
       inventory: this.inventory.toJSON(),
       isAdmin: this.isAdmin,
     };

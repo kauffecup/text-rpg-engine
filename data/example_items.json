@@ -4,7 +4,7 @@
     "description": "this is an example item",
     "aliases": ["example item 1", "ei1"]
   },
-  "item_example_coin": {
+  "item_example_2": {
     "name": "Coin",
     "description": "How many coins can ya get?",
     "aliases": ["coin"]

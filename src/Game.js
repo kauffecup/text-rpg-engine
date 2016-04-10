@@ -45,7 +45,7 @@ export default (input, userObj, respond, entityManager, gameState) => {
     _handleGroupInventory(gameState, entityManager, respond);
   // list the current players inventory
   } else if (INVENTORY_REGEX.test(input)) {
-    respond(player.describeInventory());
+    respond(player.describe());
   // #hamilton
   } else if (LOOK_AROUND_REGEX.test(input)) {
     respond(strings.lookAround);
@@ -56,16 +56,21 @@ export default (input, userObj, respond, entityManager, gameState) => {
     _handleInspect(matchedItemId, entityAttempt, entityManager, respond);
   } else if (LOCATION_REGEX.test(input)) {
     currentArea.activate(respond);
-  // attempt picking up an item
-  } else if (PICKUP_REGEX.test(input)) {
-    const entityAttempt = PICKUP_REGEX.exec(input)[1];
-    const matchedItemID = currentArea.matchItem(entityAttempt);
-    _handleItemPickup(matchedItemID, entityAttempt, entityManager, player, currentArea, respond);
   // drop an item
   } else if (DROP_REGEX.test(input)) {
     const entityAttempt = DROP_REGEX.exec(input)[1];
     const matchedItemID = player.matchItem(entityAttempt);
     _handleItemDrop(matchedItemID, entityAttempt, entityManager, player, currentArea, respond);
+  // here be a death wish... everything below this line you can't do if you're dead
+  // we leave "drop" above the line to make sure you can pass on inventory stuff
+  // that flow will prolly change later.
+  } else if (player.getHP() <= 0) {
+    respond('You can\'t do anything, silly... you\'re dead!');
+  // attempt picking up an item
+  } else if (PICKUP_REGEX.test(input)) {
+    const entityAttempt = PICKUP_REGEX.exec(input)[1];
+    const matchedItemID = currentArea.matchItem(entityAttempt);
+    _handleItemPickup(matchedItemID, entityAttempt, entityManager, player, currentArea, respond);
   // attempt opening a door
   } else if (OPEN_REGEX.test(input)) {
     const doorAttempt = OPEN_REGEX.exec(input)[1];
@@ -88,8 +93,7 @@ export default (input, userObj, respond, entityManager, gameState) => {
     _handleTraverse(matchedDoor, doorAttempt, respond, entityManager, currentArea, gameState);
   // if none of these match, delegate the input to the current area
   } else {
-    const entityIDs = player.getAllEntities();
-    currentArea.execute(input, respond, entityIDs);
+    currentArea.execute(input, respond, player);
   }
   gameState.save();
 };
@@ -115,7 +119,7 @@ const _handleGroupInventory = (gameState, entityManager, respond) => {
   for (const playerID of playerIDs) {
     const playerObj = entityManager.get(playerID);
     if (playerObj) {
-      pretty += playerObj.describeInventory() + '\n';
+      pretty += playerObj.describe() + '\n';
     }
   }
   respond(pretty);
