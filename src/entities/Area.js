@@ -18,7 +18,7 @@ export default class Area extends _EntityWithInventory {
     super(props);
     // from areas.json
     this.dialogue = new Dialogue(Object.assign({}, props.dialogue, {
-      entityManager: this.entityManager
+      entityManager: this.entityManager,
     }));
     this.lookText = props.lookText;
     this.doors = props.doors || [];

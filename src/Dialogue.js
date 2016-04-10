@@ -67,7 +67,7 @@ export default class Dialogue {
    */
   startBattle() {
     this.currentBattle = new Battle(Object.assign({}, this.conversation[this.progress].battle, {
-      entityManager: this.entityManager
+      entityManager: this.entityManager,
     }));
     return this.describeBattle();
   }
