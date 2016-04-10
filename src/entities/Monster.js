@@ -5,6 +5,7 @@ import _MatchableEntity from './_MatchableEntity';
  */
 export default class Monster extends _MatchableEntity {
   constructor(props) {
+    props.aliases = [props.name].concat(props.aliases);
     super(props);
     this.name = props.name;
     this.hp = props.hp;

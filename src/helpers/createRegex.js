@@ -10,5 +10,5 @@
  * matched.
  */
 export default (commandArray, capture) => {
-  return new RegExp(`^(?:${commandArray.join('|')})` + (capture ? ' (.*)' : ''), 'i');
+  return new RegExp(`^(?:${commandArray.map(s => s.replace("+", "\\+")).join('|')})` + (capture ? ' (.*)' : ''), 'i');
 };

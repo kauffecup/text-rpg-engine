@@ -30,13 +30,16 @@ export default class Battle {
   }
 
   execute(input, respond, player) {
+    let somethingHappened = false;
     if (ATTACK_REGEX.test(input)) {
       this.playerAttempt(input, respond, player);
+      somethingHappened = true;
     } else if (DODGE_REGEX.test(input)) {
       player.setDodge(true);
       respond(`${player.name} is attempting to dodge...`);
+      somethingHappened = true;
     }
-    if (this.monsters.length) {
+    if (somethingHappened && this.monsters.length) {
       this.handleStrikeBack(respond);
     }
     return this.monsters.length === 0;
@@ -71,7 +74,7 @@ export default class Battle {
       if (!found) {
         respond(`no enemy goes by ${monsterAttempt}`);
       }
-      // oh no! we missed!
+    // oh no! we missed!
     } else {
       respond('oh noes! you missed!');
     }
@@ -83,7 +86,7 @@ export default class Battle {
       if (this.playerHitMap.hasOwnProperty((playerID))) {
         probabilities.push({
           playerID,
-          p: this.playerHitMap[playerID],
+          p: this.playerHitMap[playerID] / this.totalHits,
         });
       }
     }
@@ -99,7 +102,6 @@ export default class Battle {
   handleStrikeBack(respond) {
     if (this.gearingUpMonster && this.gearingUpTarget) {
       const player = this.entityManager.get(this.gearingUpTarget);
-      console.log(player.getDodge() ? MONSTER_HIT_WHILE_PLAYER_DODGE_PROBABILITY : MONSTER_HIT_PROBABILITY);
       if (Math.random() < (player.getDodge() ? MONSTER_HIT_WHILE_PLAYER_DODGE_PROBABILITY : MONSTER_HIT_PROBABILITY)) {
         player.wound();
         respond(`${this.gearingUpMonster.name} strikes ${this.entityManager.get(this.gearingUpTarget).name}`);
