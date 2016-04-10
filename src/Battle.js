@@ -12,6 +12,10 @@ const MONSTER_HIT_WHILE_PLAYER_DODGE_PROBABILITY = 0.1;
 export default class Battle {
   constructor(props) {
     this.entityManager = props.entityManager;
+    // speed is probably the wrong word, because this is the opposite... can
+    // specify after how much user interaction monsters strike back
+    this.speed = props.speed || 1;
+    this.curCount = 0;
     this.monsters = [];
     this.playerHitMap = {};
     this.totalHits = 0;
@@ -39,8 +43,9 @@ export default class Battle {
       respond(`${player.name} is attempting to dodge...`);
       somethingHappened = true;
     }
-    if (somethingHappened && this.monsters.length) {
+    if (somethingHappened && this.monsters.length && ++this.curCount === this.speed) {
       this.handleStrikeBack(respond);
+      this.curCount = 0;
     }
     return this.monsters.length === 0;
   }
