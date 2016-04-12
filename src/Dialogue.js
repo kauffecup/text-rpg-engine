@@ -32,6 +32,13 @@ export default class Dialogue {
   }
 
   /**
+   * Restart the dialogue!
+   */
+  restart() {
+    this.progress = 0;
+  }
+
+  /**
    * For help text, either return its current helpText or its completed text
    * (if complete)
    */

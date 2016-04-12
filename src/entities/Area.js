@@ -33,6 +33,14 @@ export default class Area extends _EntityWithInventory {
   }
 
   /**
+   * Let's restart this puppy
+   */
+  restart(respond) {
+    this.dialogue.restart();
+    this.activate(respond);
+  }
+
+  /**
    * Called with user input and a return function if not intercepted by Game
    * Handles directing text towards either the dialogue, door, or inventory.
    */

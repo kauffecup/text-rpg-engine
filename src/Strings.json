@@ -22,6 +22,7 @@
   "doorStatusClosed": "{{doorDescription}}, it is unlocked",
   "doorStatusOpen": "{{doorDescription}} - open!",
   "dropSuccess": "Successfully dropped {{itemName}}",
+  "everyoneIsDead": "Eek! You've all been knocked out! Let's start this area over, shall we?",
   "fallToFloor": "{{itemName}} (x{{itemCount}}) falls to the floor...",
   "lookAround": "...at how lucky we are to be alive right now",
   "missingSomething": "You appear to be missing something...",

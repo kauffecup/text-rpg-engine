@@ -95,6 +95,13 @@ export default (input, userObj, respond, entityManager, gameState) => {
   } else {
     currentArea.execute(input, respond, player);
   }
+  // if at this point all of our players are dead, restart the current area
+  const players = gameState.getPlayers().map(p => entityManager.get(p));
+  if (players.reduce((v, p) => p.getHP() <= 0 && v, true)) {
+    respond(strings.everyoneIsDead);
+    currentArea.restart(respond);
+    players.map(p => p.reset());
+  }
   gameState.save();
 };
 

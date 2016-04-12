@@ -12,12 +12,19 @@ export default class Player extends _EntityWithInventory {
     this.oneOfTypeMap = {};
     this.isAdmin = props.isAdmin;
     this.hp = props.hp;
+    this.maxHP = props.maxHP;
     this.dodging = false;
   }
 
   /** Return an array of the keys a player has */
   getKeys() {
     return this.inventory.getAllOfType('keys');
+  }
+
+  /** Reset our state */
+  reset() {
+    this.hp = this.maxHP;
+    this.setDodge(false);
   }
 
   /** @override _EntityWithInventory - perform oneOfType validation first */
@@ -79,6 +86,7 @@ export default class Player extends _EntityWithInventory {
       description: this.description,
       name: this.name,
       hp: this.hp,
+      maxHP: this.maxHP,
       inventory: this.inventory.toJSON(),
       isAdmin: this.isAdmin,
     };

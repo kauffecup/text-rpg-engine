@@ -64,7 +64,7 @@ export default class EntityManager {
 
   /** Like load... but for a player, also it returns it. */
   loadPlayer(props) {
-    const newProps = Object.assign({hp: DEFAULT_PLAYER_HP}, props, {
+    const newProps = Object.assign({hp: DEFAULT_PLAYER_HP, maxHP: DEFAULT_PLAYER_HP}, props, {
       entityManager: this,
       type: 'players',
     });
