@@ -65,7 +65,7 @@ export default (input, userObj, respond, entityManager, gameState) => {
   // we leave "drop" above the line to make sure you can pass on inventory stuff
   // that flow will prolly change later.
   } else if (player.getHP() <= 0) {
-    respond('You can\'t do anything, silly... you\'re dead!');
+    respond(strings.dead);
   // attempt picking up an item
   } else if (PICKUP_REGEX.test(input)) {
     const entityAttempt = PICKUP_REGEX.exec(input)[1];
