@@ -52,7 +52,7 @@ export const clearSave = () => {
 /** Helper method to handle the actual file write */
 const _write = (relativePath, json) => {
   return new Promise((resolve, reject) => {
-    fs.writeFile(path.resolve(__dirname, relativePath), JSON.stringify(json), e => {
+    fs.writeFile(path.resolve(__dirname, relativePath), JSON.stringify(json, null, 2), e => {
       if (e) {
         console.error(e);
         reject(e);

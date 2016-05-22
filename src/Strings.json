@@ -7,6 +7,7 @@
   "battleMonsterMiss": "{{monsterName}} missed!",
   "battleMonsterStrike": "{{monsterName}} strikes {{playerName}}!",
   "battleMonsterStrikeFatal": "{{playerName}} is super dead.",
+  "battleNoWeapon": "Sorry, {{playerName}}, you don't have {{weaponAttempt}}",
   "battleNoMonster": "no enemy goes by {{monsterAttempt}}",
   "battlePlayerDodgeAttempt": "{{playerName}} is attempting to dodge...",
   "battlePlayerLoseDodge": "{{playerName}} is no longer on his guard...",

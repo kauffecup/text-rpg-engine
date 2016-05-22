@@ -1,5 +1,6 @@
 {
   "attack": ["attack", "hit", "slap", "punch", "kick", "smack"],
+  "attackWith": ["with", "using", "on"],
   "clearSave": ["clear save"],
   "close": ["close", "shut"],
   "dodge": ["dodge"],

@@ -12,5 +12,6 @@ export default class Item extends _MatchableEntity {
     super(props);
     this.name = props.name;
     this.oneOfType = props.oneOfType;
+    this.attack = props.attack;
   }
 }

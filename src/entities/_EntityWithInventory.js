@@ -17,6 +17,7 @@ export default class _EntityWithInventory extends _Entity {
 
   /** Return the ID of an item that matches the given input, or nothing if no match is found*/
   matchItem(input) {
+    if (!input) return null;
     const itemIDs = this.inventory.getIDs();
     for (const itemID of itemIDs) {
       const item = this.entityManager.get(itemID);

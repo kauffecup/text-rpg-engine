@@ -8,5 +8,21 @@
     "name": "Coin",
     "description": "How many coins can ya get?",
     "aliases": ["coin"]
+  },
+  "item_example_3": {
+    "name": "First Example One of Type",
+    "description": "If you specify 'oneOfType' then only one of those items can be in a given player's inventory",
+    "oneOfType": "mattDamon"
+  },
+  "item_example_4": {
+    "name": "Second Exaple One of Type",
+    "description": "Because this has the same oneOfType as item_example_4, a player can't have both",
+    "oneOfType": "mattDamon"
+  },
+  "item_example_5": {
+    "name": "Example Weapon",
+    "description": "you can add attack to items",
+    "aliases": ["example weapon"],
+    "attack": 2
   }
 }

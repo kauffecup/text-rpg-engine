@@ -1,10 +1,13 @@
 import Monster     from './entities/Monster';
-import createRegex from './helpers/createRegex';
 import commands    from './Commands.json';
 import strings     from './Strings.json';
 import S           from 'string';
+import createRegex, {
+  multiMatch,
+} from './helpers/createRegex';
 
 const ATTACK_REGEX = createRegex(commands.attack, true);
+const ATTACK_WITH_REGEX = multiMatch(commands.attack, commands.attackWith);
 const DODGE_REGEX = createRegex(commands.dodge, false);
 
 const PLAYER_HIT_PROBABILITY = 0.9;
@@ -39,7 +42,9 @@ export default class Battle {
         const monsterprops = this.entityManager.get(monsterID);
         // the value of props (for a given id) is the # of monsters for that id
         for (let i = 0; i < props.monsters[monsterID]; i++) {
-          this.monsters.push(new Monster(monsterprops));
+          this.monsters.push(new Monster(Object.assign({}, monsterprops, {
+            entityManager: this.entityManager,
+          })));
         }
       }
     }
@@ -51,9 +56,17 @@ export default class Battle {
    */
   execute(input, respond, player) {
     let somethingHappened = false;
-    // the user is attacking!
-    if (ATTACK_REGEX.test(input)) {
-      this.playerAttempt(input, respond, player);
+    // the user is attempting to use a weapon!
+    if (ATTACK_WITH_REGEX.test(input)) {
+      const results = ATTACK_WITH_REGEX.exec(input);
+      const monsterAttempt = results[1];
+      const weaponAttempt = results[2];
+      this.playerAttempt(input, respond, player, monsterAttempt, weaponAttempt);
+      somethingHappened = true;
+    // the user is attacking without a weapon!
+    } else if (ATTACK_REGEX.test(input)) {
+      const monsterAttempt = ATTACK_REGEX.exec(input)[1];
+      this.playerAttempt(input, respond, player, monsterAttempt);
       somethingHappened = true;
     // the user is dodging!
     } else if (DODGE_REGEX.test(input)) {
@@ -77,7 +90,7 @@ export default class Battle {
    * If it's a hit, we find the monster they're going after, and wound them. If
    * that's a fatal wound, we remove the monstah.
    */
-  playerAttempt(input, respond, player) {
+  playerAttempt(input, respond, player, monsterAttempt, weaponAttempt) {
     const playerID = player._id;
     // first we update our player map and total hits to adjust the probability
     // that this player will be targeted by monsters retaliating
@@ -87,17 +100,19 @@ export default class Battle {
     // this'll be our "pretty response" string. rather than executing a response
     // for each possibility, we concatenate on to this guy to limit # of outputs
     let pretty = '';
+    const matchedWeapon = player.matchItem(weaponAttempt);
+    if (!!weaponAttempt && !matchedWeapon) {
+      pretty += S(strings.battleNoWeapon).template({playerName: player.name, weaponAttempt}).s;
     // first we see if this attack attempt is a hit vs a miss
-    if (Math.random() < PLAYER_HIT_PROBABILITY) {
+    } else if (Math.random() < PLAYER_HIT_PROBABILITY) {
       // it's a hit! let's see what we're attempting to hit...
-      const monsterAttempt = ATTACK_REGEX.exec(input)[1];
       let found = false;
       for (let i = 0; i < this.monsters.length && !found; i++) {
         const monster = this.monsters[i];
         if (monster.match(monsterAttempt)) {
           // aha! we found a match! let's hurt this bad boi and append our pretty string
           found = true;
-          monster.wound();
+          monster.wound(matchedWeapon);
           pretty += S(strings.battlePlayerHitSuccess).template({monsterName: monster.name}).s;
           // if this monster is now dead, we remove it from our monsters array
           // also if that monster was "gearing up" we clear it. deads can't attack!
