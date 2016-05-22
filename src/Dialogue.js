@@ -15,6 +15,17 @@ export default class Dialogue {
     this.completeText = props.completeText;
     this.completeHelp = props.completeHelp;
     this.completeDrops = props.completeDrops || {};
+    this.progression = props.progression;
+
+    // This gets the first field in the object.
+    // Because they're ordered.
+    // Because javascript says fuck logic.
+    for (var text in this.conversation) {
+      this.activeText = text;
+      break;
+    }
+    var key = "conversationStart";
+    //console.log(this.conversation[key]);
   }
 
   /**
@@ -26,16 +37,19 @@ export default class Dialogue {
     if (this.isComplete()) {
       return this.completeText;
     } else if (this.isBattle()) {
-      return `${this.conversation[this.progress].description}\n${this.startBattle()}`;
+      return `${this.activeText.description}\n${this.startBattle()}`;
     }
-    return this.conversation[this.progress].description;
+    return this.activeText.description;
   }
 
   /**
    * Restart the dialogue!
    */
   restart() {
-    this.progress = 0;
+    for (var text in this.conversation) {
+      this.activeText = text;
+      break;
+    }
   }
 
   /**
@@ -43,25 +57,26 @@ export default class Dialogue {
    * (if complete)
    */
   help() {
-    return this.isComplete() ? this.completeHelp : this.conversation[this.progress].helpText;
+    return this.isComplete() ? this.completeHelp : this.activeText.helpText;
   }
 
   /**
    * When executing the user's input, check against all possible choices and
-   * return true or false depending on if we have received a match.
+   * return the name of the next dialogue block, or false if dialogue should not proceed.
    */
   execute(input, respond, player) {
     if (this.isBattle()) {
       return this._handleBattle(input, respond, player);
     }
-    return createRegex(this.conversation[this.progress].aliases, false).test(input);
+    return createRegex(this.activeText.aliases, false).test(input);
   }
 
   /**
    * Returns whether or not the current progression point is a battle
    */
   isBattle() {
-    const conversation = this.conversation[this.progress];
+    // TODO jordan do we need this const?
+    const conversation = this.activeText;
     return !!conversation && !!conversation.battle;
   }
 
@@ -73,7 +88,7 @@ export default class Dialogue {
    * Called by the containing Area when we enter a progression that is now a battle
    */
   startBattle() {
-    this.currentBattle = new Battle(Object.assign({}, this.conversation[this.progress].battle, {
+    this.currentBattle = new Battle(Object.assign({}, this.activeText.battle, {
       entityManager: this.entityManager,
     }));
     return this.describeBattle();
@@ -98,7 +113,7 @@ export default class Dialogue {
    * See if the input matches any of the "incorrect input"
    */
   executeIncorrect(input) {
-    const incorrectChoices = this.conversation[this.progress].incorrectChoices;
+    const incorrectChoices = this.activeText.incorrectChoices;
     return incorrectChoices && incorrectChoices.length && createRegex(incorrectChoices, false).test(input);
   }
 
@@ -106,17 +121,17 @@ export default class Dialogue {
    * Return the incorrect text for our current progress in the conversation
    */
   getIncorrectText() {
-    return this.conversation[this.progress].incorrectText;
+    return this.activeText.incorrectText;
   }
 
   /** See if one of these items is our required item */
   testItems(entityIDs = []) {
-    return this.requiresItem() ? entityIDs.indexOf(this.conversation[this.progress].requiredItem) > -1 : true;
+    return this.requiresItem() ? entityIDs.indexOf(this.activeText.requiredItem) > -1 : true;
   }
 
-  /** See if we're at a conversation point that requires an item */
-  requiresItem() {
-    const conversation = this.conversation[this.progress];
+  /** See if this we're at a conversation point that requires an item */
+  requiresItem(textKey) {
+    const conversation = this.conversation[textKey];
     return !!conversation && !!conversation.requiredItem;
   }
 
@@ -127,12 +142,18 @@ export default class Dialogue {
 
   /** Return whether or not this dialogue is complete */
   isComplete() {
-    return this.progress === this.conversation.length;
+    // TODO jordan do I need the inner if statement?
+    for(var key in this.conversation.progression) {
+      if (this.conversation.progression.hasOwnProperty(key)) {
+         return false;
+      }
+   }
+   return true;
   }
 
   /** Simple getter */
   getDrops() {
-    return this.conversation[this.progress].completeDrops;
+    return this.activeText.completeDrops;
   }
 
   /** The only thing that can mutate is the progress */

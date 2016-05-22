@@ -3,22 +3,41 @@
     "description": "example 01",
     "dialogue": {
       "progress": 0,
-      "conversation": [{
-        "description": "example 01 conversation 01",
-        "helpText": "example 01 help 01",
-        "aliases": ["one", "1"]
-      }, {
-        "description": "example 01 conversation 02",
-        "helpText": "example 01 help 02",
-        "aliases": ["two", "2"]
-      }, {
-        "description": "example 01 conversation 03",
-        "helpText": "example 01 help 03",
-        "aliases": ["three", "3"],
-        "completeDrops": {
-          "key_example_01_02": 1
+      "conversation": {
+        "conversationStart": {
+          "description": "example 01 conversation 01",
+          "helpText": "example 01 help 01",
+          "aliases": ["one", "1"],
+          "progression":
+          {
+            "goto1":"area01_text01",
+            "goto2":"area01_text02",
+            "goto3":"area01_text03"
+          }
+        }, 
+        "area01_text02": {
+          "description": "example 01 conversation 02",
+          "helpText": "example 01 help 02",
+          "aliases": ["two", "2"],
+          "progression":
+          {
+            "goto2":"area01_text02",
+            "goto3":"area01_text03"
+          }
+        },
+        "area01_text03": {
+          "description": "example 01 conversation 03",
+          "helpText": "example 01 help 03",
+          "aliases": ["three", "3"],
+          "completeDrops": {
+            "key_example_01_02": 1
+          },
+          "progression":
+          {
+            "goto1":"area01_text01"
+          }
         }
-      }],
+      },
       "completeText": "example 01 complete",
       "completeHelp": "example 01 complete help"
     },
@@ -29,15 +48,17 @@
       }
     }
   },
-  "area_02": {
+  "area_02":{
     "description": "example 02",
     "dialogue": {
       "progress": 0,
       "conversation": [{
+        "key": "area02_text01",
         "description": "example 02 conversation 01",
         "helpText": "example 02 help 01",
         "aliases": ["one", "1"]
       }, {
+        "key": "area02_text02",
         "description": "example 02 battle 01",
         "helpText": "battle 01 help",
         "battle": {
@@ -50,10 +71,12 @@
           "item_example_2": 10
         }
       }, {
+        "key": "area02_text03",
         "description": "example 02 conversation 02",
         "helpText": "example 02 help 02",
         "aliases": ["two", "2"]
       }, {
+        "key": "area02_text04",
         "description": "example 02 battle 02",
         "helpText": "battle 02 help 0",
         "battle": {
