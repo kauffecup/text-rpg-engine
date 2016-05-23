@@ -4,15 +4,15 @@
     "dialogue": {
       "progress": 0,
       "conversation": {
-        "conversationStart": {
+        "area01_text01": {
           "description": "example 01 conversation 01",
           "helpText": "example 01 help 01",
           "aliases": ["one", "1"],
           "progression":
           {
-            "goto1":"area01_text01",
-            "goto2":"area01_text02",
-            "goto3":"area01_text03"
+            "area01_text01":["goto1", "goto same", "1"],
+            "area01_text02":["goto2", "goto next", "2"],
+            "area01_text03":["goto3", "goto last", "3"]
           }
         }, 
         "area01_text02": {
@@ -21,8 +21,8 @@
           "aliases": ["two", "2"],
           "progression":
           {
-            "goto2":"area01_text02",
-            "goto3":"area01_text03"
+            "area01_text02":["goto2", "goto same", "2"],
+            "area01_text03":["goto3", "goto next", "3"]
           }
         },
         "area01_text03": {
@@ -34,7 +34,7 @@
           },
           "progression":
           {
-            "goto1":"area01_text01"
+            "area01_text01":["goto1", "goto first", "1"]
           }
         }
       },

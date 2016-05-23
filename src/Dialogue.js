@@ -21,7 +21,7 @@ export default class Dialogue {
     // Because they're ordered.
     // Because javascript says fuck logic.
     for (var text in this.conversation) {
-      this.activeText = text;
+      this.activeText = this.conversation[text];
       break;
     }
   }
@@ -79,7 +79,9 @@ export default class Dialogue {
    *            no appropriate state is found
    */
   getNextTextKey(input) {
-    var progressionMap = this.activateText.progression;
+    console.log("getting next text key");
+    var progressionMap = this.activeText.progression;
+    console.log(progressionMap);
     for(var key in progressionMap) {
 
       // Ignore if the property is from prototype
@@ -89,9 +91,13 @@ export default class Dialogue {
 
       // Make a regex from the progression map entry and check user input against it
       if (createRegex(progressionMap[key]).test(input)) {
+        console.log("found a match");
+        console.log(key);
         return key;
       }
     }
+    console.log("no match for input");
+    console.log(input);
     return false;
   }
   /**
@@ -162,38 +168,45 @@ export default class Dialogue {
    * Returns true if player meets all requirements to enter the text state matching the key textKey, false otherwise
    */
   meetsRequirements(textKey, player) {
-    if(!conversation || !conversation.requiredItem) {
+    const textStateToCheck = this.conversation[textKey];
+    if(!textStateToCheck || !textStateToCheck.requiredItem) {
       return true;
     }
     playerItems = player.getAllEntities() || [];
-    return this.requiresItem() ? playerItems.indexOf(this.conversation.get(textKey).requiredItem) > -1 : true;
+    return this.requiresItem() ? playerItems.indexOf(this.conversation[textKey].requiredItem) > -1 : true;
   }
 
   /** To advance the conversation, simply increase our progress state */
-  advanceConversation(nextTextKey) {
-    //this.progress = Math.min(this.progress + 1, this.conversation.length);
-    this.activeText = this.conversation.get(nextTextKey);
+  advanceConversation() {
+    this.progress = Math.min(this.progress + 1, this.conversation.length);
   }
 
   /**
    * Set the active text state as the state matching nextTextKey
    *
    * @param nextTextKey - key name of the text state to go to
+   * @return - true if successful, false otherwise (should never happen unless there's a typo)
    */
   goToTextState(textKey) {
-    //this.progress = Math.min(this.progress + 1, this.conversation.length);
-    this.activeText = this.conversation.get(nextTextKey);
+    if(this.conversation.hasOwnProperty(textKey)) {
+      this.activeText = this.conversation[textKey];
+      return true;
+    }
+    return false;
   }
 
-  /** Return whether or not this dialogue is complete */
+  /**
+   * Is the dialogue at an ending state (one with no possible progression)
+   * 
+   * @return - true if the conversation has no possible progressions, false otherwise
+   */
   isComplete() {
-    // TODO jordan do I need the inner if statement?
-    for(var key in this.conversation.progression) {
-      if (this.conversation.progression.hasOwnProperty(key)) {
+    for(var key in this.activeText.progression) {
+      if (this.activeText.progression.hasOwnProperty(key)) {
          return false;
       }
-   }
-   return true;
+    }
+    return true;
   }
 
   /** Simple getter */
