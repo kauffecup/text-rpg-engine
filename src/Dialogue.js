@@ -24,8 +24,6 @@ export default class Dialogue {
       this.activeText = text;
       break;
     }
-    var key = "conversationStart";
-    //console.log(this.conversation[key]);
   }
 
   /**
@@ -61,16 +59,41 @@ export default class Dialogue {
   }
 
   /**
-   * When executing the user's input, check against all possible choices and
-   * return the name of the next dialogue block, or false if dialogue should not proceed.
+   * Progress the current text state and any associated battle.
+   *
+   * @return - true if there's nothing left to execute, false otherwise.
    */
   execute(input, respond, player) {
     if (this.isBattle()) {
       return this._handleBattle(input, respond, player);
     }
-    return createRegex(this.activeText.aliases, false).test(input);
+    return true;//createRegex(this.activeText.aliases, false).test(input);
   }
 
+  /**
+   * Given user input, evaluate and return the key of the next text state
+   * NOTE: If the user input matches multiple regexes,the first one in the list will be used
+   * 
+   * @input - string that prompted the conversation progression
+   * @return - Key name of the next text state in this.conversation, or false if
+   *            no appropriate state is found
+   */
+  getNextTextKey(input) {
+    var progressionMap = this.activateText.progression;
+    for(var key in progressionMap) {
+
+      // Ignore if the property is from prototype
+      if(!progressionMap.hasOwnProperty(key)) {
+        continue;
+      }
+
+      // Make a regex from the progression map entry and check user input against it
+      if (createRegex(progressionMap[key]).test(input)) {
+        return key;
+      }
+    }
+    return false;
+  }
   /**
    * Returns whether or not the current progression point is a battle
    */
@@ -135,9 +158,31 @@ export default class Dialogue {
     return !!conversation && !!conversation.requiredItem;
   }
 
+  /**
+   * Returns true if player meets all requirements to enter the text state matching the key textKey, false otherwise
+   */
+  meetsRequirements(textKey, player) {
+    if(!conversation || !conversation.requiredItem) {
+      return true;
+    }
+    playerItems = player.getAllEntities() || [];
+    return this.requiresItem() ? playerItems.indexOf(this.conversation.get(textKey).requiredItem) > -1 : true;
+  }
+
   /** To advance the conversation, simply increase our progress state */
-  advanceConversation() {
-    this.progress = Math.min(this.progress + 1, this.conversation.length);
+  advanceConversation(nextTextKey) {
+    //this.progress = Math.min(this.progress + 1, this.conversation.length);
+    this.activeText = this.conversation.get(nextTextKey);
+  }
+
+  /**
+   * Set the active text state as the state matching nextTextKey
+   *
+   * @param nextTextKey - key name of the text state to go to
+   */
+  goToTextState(textKey) {
+    //this.progress = Math.min(this.progress + 1, this.conversation.length);
+    this.activeText = this.conversation.get(nextTextKey);
   }
 
   /** Return whether or not this dialogue is complete */

@@ -58,9 +58,36 @@ export default class Area extends _EntityWithInventory {
       // if we've made it here, we will try to progress the dialog if it isn't
       // already complete
       if (!this.dialogue.isComplete()) {
+
+        // 1) Check if the current text block is done (battle, etc.)
+        let executionFinished = this.dialogue.execute(input, respond, player);
+
+        // 2) Do regex stuff to find the next block
+        if(executionFinished) {
+          let nextTextKey = this.dialogue.getNextTextKey();
+
+          if(nextTextKey)
+          {
+            // Make sure you meet any requirements to enter the new text block
+            const entityIDs = player.getAllEntities() || [];
+            if(this.dialogue.meetsRequirements(textKey, player)) {
+              // Advance the dialogue
+              const drops = this.dialogue.getDrops();
+              this.dialogue.advanceConversation();
+            }
+            else {
+              // Player does not meet requirements
+              respond(strings.missingSomething);
+            }
+          }
+        }
+
+        // 3) Advance (including drop items)
+        
         let shouldAdvance = this.dialogue.execute(input, respond, player);
         // if the user used the right command (and we're not battling) but doesn't have the correct item, tell them
         const entityIDs = player.getAllEntities() || [];
+        // TODO mid battle returns false so we don't need isbattle, 
         if (shouldAdvance && !this.dialogue.isBattle() && this.dialogue.requiresItem() && !this.dialogue.testItems(entityIDs)) {
           shouldAdvance = false;
           respond(strings.missingSomething);
