@@ -1,6 +1,13 @@
 import createRegex from './helpers/createRegex';
 import Battle from './Battle';
 
+// the dialoge JSON config can optionally specify "complete" as a key in its
+// progression map. i.e. if a user enters the magic words, they complete the
+// dialogue. when this goes down we will use that to determine if the dialogue
+// is in its completed state. alternatively, if a dialgue specifies no
+// progression map, it is also assumed to be complete.
+const COMPLETE_KEY = 'complete';
+
 /**
  * A Dialogue class
  * Maintains the progress in a conversation and handles advancing. Also handles
@@ -50,12 +57,15 @@ export default class Dialogue {
 
   /**
    * Progress the current text state and any associated battle.
-   *
-   * @return - true if there's nothing left to execute, false otherwise.
+   * @return - the next conversation key if the input was dandy, false if otherwise
    */
   execute(input, respond, player) {
     if (this.isBattle()) {
-      return this._handleBattle(input, respond, player);
+      if (this._handleBattle(input, respond, player)) {
+        // for battles, progression is an id string, not a map
+        return this.conversation[this.progress].progression;
+      }
+      return false;
     }
     return this.getNextTextKey(input);
   }
@@ -84,7 +94,6 @@ export default class Dialogue {
    * Returns whether or not the current progression point is a battle
    */
   isBattle() {
-    // TODO jordan do we need this const?
     const conversation = this.conversation[this.progress];
     return !!conversation && !!conversation.battle;
   }
@@ -162,7 +171,7 @@ export default class Dialogue {
   * @return - true if successful, false otherwise (should never happen unless there's a typo)
   */
   advanceConversation(textKey) {
-    if (this.conversation.hasOwnProperty(textKey)) {
+    if (textKey === COMPLETE_KEY || this.conversation.hasOwnProperty(textKey)) {
       this.progress = textKey;
       return true;
     }
@@ -171,16 +180,11 @@ export default class Dialogue {
 
   /**
    * Is the dialogue at an ending state (one with no possible progression)
-   *
    * @return - true if the conversation has no possible progressions, false otherwise
    */
   isComplete() {
-    for (const key in this.conversation[this.progress].progression) {
-      if (this.conversation[this.progress].progression.hasOwnProperty(key)) {
-        return false;
-      }
-    }
-    return true;
+    const conversation = this.conversation[this.progress];
+    return (this.progress === COMPLETE_KEY) || (!conversation || !conversation.progression);
   }
 
   /** Simple getter */
