@@ -16,14 +16,7 @@ export default class Dialogue {
     this.completeHelp = props.completeHelp;
     this.completeDrops = props.completeDrops || {};
     this.progression = props.progression;
-
-    // This gets the first field in the object.
-    // Because they're ordered.
-    // Because javascript says fuck logic.
-    for (var text in this.conversation) {
-      this.activeText = this.conversation[text];
-      break;
-    }
+    this.resetKey = props.resetKey;
   }
 
   /**
@@ -35,19 +28,16 @@ export default class Dialogue {
     if (this.isComplete()) {
       return this.completeText;
     } else if (this.isBattle()) {
-      return `${this.activeText.description}\n${this.startBattle()}`;
+      return `${this.conversation[this.progress].description}\n${this.startBattle()}`;
     }
-    return this.activeText.description;
+    return this.conversation[this.progress].description;
   }
 
   /**
    * Restart the dialogue!
    */
   restart() {
-    for (var text in this.conversation) {
-      this.activeText = text;
-      break;
-    }
+    this.progress = this.resetKey;
   }
 
   /**
@@ -55,7 +45,7 @@ export default class Dialogue {
    * (if complete)
    */
   help() {
-    return this.isComplete() ? this.completeHelp : this.activeText.helpText;
+    return this.isComplete() ? this.completeHelp : this.conversation[this.progress].helpText;
   }
 
   /**
@@ -67,20 +57,20 @@ export default class Dialogue {
     if (this.isBattle()) {
       return this._handleBattle(input, respond, player);
     }
-    return true;//createRegex(this.activeText.aliases, false).test(input);
+    return this.getNextTextKey(input);
   }
 
   /**
    * Given user input, evaluate and return the key of the next text state
    * NOTE: If the user input matches multiple regexes,the first one in the list will be used
-   * 
+   *
    * @input - string that prompted the conversation progression
    * @return - Key name of the next text state in this.conversation, or false if
    *            no appropriate state is found
    */
   getNextTextKey(input) {
     console.log("getting next text key");
-    var progressionMap = this.activeText.progression;
+    var progressionMap = this.conversation[this.progress].progression;
     console.log(progressionMap);
     for(var key in progressionMap) {
 
@@ -105,7 +95,7 @@ export default class Dialogue {
    */
   isBattle() {
     // TODO jordan do we need this const?
-    const conversation = this.activeText;
+    const conversation = this.conversation[this.progress];
     return !!conversation && !!conversation.battle;
   }
 
@@ -117,7 +107,7 @@ export default class Dialogue {
    * Called by the containing Area when we enter a progression that is now a battle
    */
   startBattle() {
-    this.currentBattle = new Battle(Object.assign({}, this.activeText.battle, {
+    this.currentBattle = new Battle(Object.assign({}, this.conversation[this.progress].battle, {
       entityManager: this.entityManager,
     }));
     return this.describeBattle();
@@ -142,7 +132,7 @@ export default class Dialogue {
    * See if the input matches any of the "incorrect input"
    */
   executeIncorrect(input) {
-    const incorrectChoices = this.activeText.incorrectChoices;
+    const incorrectChoices = this.conversation[this.progress].incorrectChoices;
     return incorrectChoices && incorrectChoices.length && createRegex(incorrectChoices, false).test(input);
   }
 
@@ -150,12 +140,12 @@ export default class Dialogue {
    * Return the incorrect text for our current progress in the conversation
    */
   getIncorrectText() {
-    return this.activeText.incorrectText;
+    return this.conversation[this.progress].incorrectText;
   }
 
   /** See if one of these items is our required item */
   testItems(entityIDs = []) {
-    return this.requiresItem() ? entityIDs.indexOf(this.activeText.requiredItem) > -1 : true;
+    return this.requiresItem() ? entityIDs.indexOf(this.conversation[this.progress].requiredItem) > -1 : true;
   }
 
   /** See if this we're at a conversation point that requires an item */
@@ -176,20 +166,14 @@ export default class Dialogue {
     return this.requiresItem() ? playerItems.indexOf(this.conversation[textKey].requiredItem) > -1 : true;
   }
 
-  /** To advance the conversation, simply increase our progress state */
-  advanceConversation() {
-    this.progress = Math.min(this.progress + 1, this.conversation.length);
-  }
-
   /**
-   * Set the active text state as the state matching nextTextKey
-   *
-   * @param nextTextKey - key name of the text state to go to
-   * @return - true if successful, false otherwise (should never happen unless there's a typo)
-   */
-  goToTextState(textKey) {
-    if(this.conversation.hasOwnProperty(textKey)) {
-      this.activeText = this.conversation[textKey];
+  * Set the active text state as the state matching nextTextKey
+  * @param nextTextKey - key name of the text state to go to
+  * @return - true if successful, false otherwise (should never happen unless there's a typo)
+  */
+  advanceConversation(textKey) {
+    if (this.conversation.hasOwnProperty(textKey)) {
+      this.progress = textKey;
       return true;
     }
     return false;
@@ -197,12 +181,12 @@ export default class Dialogue {
 
   /**
    * Is the dialogue at an ending state (one with no possible progression)
-   * 
+   *
    * @return - true if the conversation has no possible progressions, false otherwise
    */
   isComplete() {
-    for(var key in this.activeText.progression) {
-      if (this.activeText.progression.hasOwnProperty(key)) {
+    for(var key in this.conversation[this.progress].progression) {
+      if (this.conversation[this.progress].progression.hasOwnProperty(key)) {
          return false;
       }
     }
@@ -211,7 +195,7 @@ export default class Dialogue {
 
   /** Simple getter */
   getDrops() {
-    return this.activeText.completeDrops;
+    return this.conversation[this.progress].completeDrops;
   }
 
   /** The only thing that can mutate is the progress */

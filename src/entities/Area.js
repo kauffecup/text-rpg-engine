@@ -58,85 +58,42 @@ export default class Area extends _EntityWithInventory {
       // if we've made it here, we will try to progress the dialog if it isn't
       // already complete
       if (!this.dialogue.isComplete()) {
-        console.log("dialogue not complete");
-        // 1) Check if the current text block is done (battle, etc.)
-        let executionFinished = this.dialogue.execute(input, respond, player);
-
-        // 2) Do regex stuff to find the next block
-        if (executionFinished) {
-          console.log("executionFinished");
-          let nextTextKey = this.dialogue.getNextTextKey(input);
-
-          if (nextTextKey)
-          {
-            console.log("getting next text key");
-            // Make sure you meet any requirements to enter the new text block
-            const entityIDs = player.getAllEntities() || [];
-            if (this.dialogue.meetsRequirements(nextTextKey, player)) {
-
-              // Advance the dialogue
-              let gotoSuccess = this.dialogue.goToTextState(nextTextKey);
-
-              // if the dialogue is now complete, and there are drop items, add them
-              // to our inventory and notify the user
-              if (gotoSuccess) {
-                const drops = this.dialogue.getDrops();
-                if (drops && Object.keys(drops).length) {
-                  for (const itemID in drops) {
-                    if (drops.hasOwnProperty(itemID)) {
-                      this.addEntity(itemID, drops[itemID]);
-                      respond(S(strings.fallToFloor).template({itemName: this.entityManager.get(itemID).name, itemCount: drops[itemID]}).s);
-                    }
-                  }
-                }
-                respond(this.dialogue.activate());
-              }
-              else {
-                // Getting here means we tried to goto a text state that doesn't exist in the conversation
-                // AKA mismatched key, check for typos in JSON.
-                // If Jordan ever makes a JSON form for Patrick this should cease to be an issue
-                respond(strings.conversationKeyNotFound);
-              }
-
-            }
-            else {
-              // Player does not meet requirements
-              respond(strings.missingSomething);
-            }
-          }
+        const nextTextKey = this.dialogue.execute(input, respond, player);
+        let shouldAdvance = !!nextTextKey;
+        // if the user used the right command (and we're not battling) but doesn't have the correct item, tell them
+        const entityIDs = player.getAllEntities() || [];
+        // TODO mid battle returns false so we don't need isbattle,
+        if (shouldAdvance && !this.dialogue.isBattle() && this.dialogue.requiresItem() && !this.dialogue.testItems(entityIDs)) {
+          shouldAdvance = false;
+          respond(strings.missingSomething);
         }
-        
-        // let shouldAdvance = this.dialogue.execute(input, respond, player);
-        // // if the user used the right command (and we're not battling) but doesn't have the correct item, tell them
-        // const entityIDs = player.getAllEntities() || [];
-        // // TODO mid battle returns false so we don't need isbattle, 
-        // if (shouldAdvance && !this.dialogue.isBattle() && this.dialogue.requiresItem() && !this.dialogue.testItems(entityIDs)) {
-        //   shouldAdvance = false;
-        //   respond(strings.missingSomething);
-        // }
-        // // if we've made it this far, the user has entered the correct command or won the
-        // // battle, and if an item is required... they've got it! advance the conversation.
-        // if (shouldAdvance) {
-        //   const drops = this.dialogue.getDrops();
-        //   this.dialogue.advanceConversation();
-        //   // if the dialogue is now complete, and there are drop items, add them
-        //   // to our inventory and notify the user
-        //   if (drops && Object.keys(drops).length) {
-        //     for (const itemID in drops) {
-        //       if (drops.hasOwnProperty(itemID)) {
-        //         this.addEntity(itemID, drops[itemID]);
-        //         respond(S(strings.fallToFloor).template({itemName: this.entityManager.get(itemID).name, itemCount: drops[itemID]}).s);
-        //       }
-        //     }
-        //   }
-        //   respond(this.dialogue.activate());
-        // // otherwise, see if the user put in text that we want to yell at them for
-        // } else if (this.dialogue.executeIncorrect(input)) {
-        //   respond(this.dialogue.getIncorrectText());
-        // }
-      }
-      else {
-        console.log("dialogue complete");
+        // if we've made it this far, the user has entered the correct command or won the
+        // battle, and if an item is required... they've got it! advance the conversation.
+        if (shouldAdvance) {
+          const drops = this.dialogue.getDrops();
+          const goToSuccess = this.dialogue.advanceConversation(nextTextKey);
+          if (goToSuccess) {
+            // if the dialogue is now complete, and there are drop items, add them
+            // to our inventory and notify the user
+            if (drops && Object.keys(drops).length) {
+              for (const itemID in drops) {
+                if (drops.hasOwnProperty(itemID)) {
+                  this.addEntity(itemID, drops[itemID]);
+                  respond(S(strings.fallToFloor).template({itemName: this.entityManager.get(itemID).name, itemCount: drops[itemID]}).s);
+                }
+              }
+            }
+            respond(this.dialogue.activate());
+          } else {
+            // Getting here means we tried to goto a text state that doesn't exist in the conversation
+            // AKA mismatched key, check for typos in JSON.
+            // If Jordan ever makes a JSON form for Patrick this should cease to be an issue
+            respond(strings.conversationKeyNotFound);
+          }
+        // otherwise, see if the user put in text that we want to yell at them for
+        } else if (this.dialogue.executeIncorrect(input)) {
+          respond(this.dialogue.getIncorrectText());
+        }
       }
     }
   }
