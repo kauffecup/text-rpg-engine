@@ -69,25 +69,15 @@ export default class Dialogue {
    *            no appropriate state is found
    */
   getNextTextKey(input) {
-    console.log("getting next text key");
-    var progressionMap = this.conversation[this.progress].progression;
-    console.log(progressionMap);
-    for(var key in progressionMap) {
-
-      // Ignore if the property is from prototype
-      if(!progressionMap.hasOwnProperty(key)) {
-        continue;
-      }
-
-      // Make a regex from the progression map entry and check user input against it
-      if (createRegex(progressionMap[key]).test(input)) {
-        console.log("found a match");
-        console.log(key);
-        return key;
+    const progressionMap = this.conversation[this.progress].progression;
+    for (const key in progressionMap) {
+      if (progressionMap.hasOwnProperty(key)) {
+        // Make a regex from the progression map entry and check user input against it
+        if (createRegex(progressionMap[key]).test(input)) {
+          return key;
+        }
       }
     }
-    console.log("no match for input");
-    console.log(input);
     return false;
   }
   /**
@@ -159,10 +149,10 @@ export default class Dialogue {
    */
   meetsRequirements(textKey, player) {
     const textStateToCheck = this.conversation[textKey];
-    if(!textStateToCheck || !textStateToCheck.requiredItem) {
+    if (!textStateToCheck || !textStateToCheck.requiredItem) {
       return true;
     }
-    playerItems = player.getAllEntities() || [];
+    const playerItems = player.getAllEntities() || [];
     return this.requiresItem() ? playerItems.indexOf(this.conversation[textKey].requiredItem) > -1 : true;
   }
 
@@ -185,9 +175,9 @@ export default class Dialogue {
    * @return - true if the conversation has no possible progressions, false otherwise
    */
   isComplete() {
-    for(var key in this.conversation[this.progress].progression) {
+    for (const key in this.conversation[this.progress].progression) {
       if (this.conversation[this.progress].progression.hasOwnProperty(key)) {
-         return false;
+        return false;
       }
     }
     return true;
