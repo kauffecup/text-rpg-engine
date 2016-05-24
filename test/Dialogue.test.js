@@ -27,11 +27,19 @@ describe('Dialogue', () => {
   });
 
   it('progresses through a conversation when the correct input is supplied', () => {
-    expect(dialogue.execute('one')).toBe(true);
-    dialogue.advanceConversation();
-    expect(dialogue.execute('two')).toBe(true);
-    dialogue.advanceConversation();
-    expect(dialogue.execute('3')).toBe(true);
+    const key1 = dialogue.execute('one');
+    expect(key1).toBe('area01_text02');
+    dialogue.advanceConversation(key1);
+
+    const key2 = dialogue.execute('two');
+    expect(key2).toBe('area01_text03');
+    dialogue.advanceConversation(key2);
+
+    const key3 = dialogue.execute('back to one');
+    expect(key3).toBe('area01_text01');
+
+    const key4 = dialogue.execute('3');
+    expect(key4).toBe('complete');
   });
 
   it('doesn\'t progress through a conversation when an incorrect input is supplied', () => {

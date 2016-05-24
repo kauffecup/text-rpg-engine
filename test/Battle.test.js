@@ -14,7 +14,7 @@ describe('Battle', () => {
     entityManager.load('items', testItems);
     entityManager.load('monsters', testMonsters, true);
     battle = new Battle(Object.assign({},
-      testAreas.area_test_02.dialogue.conversation[2].battle,
+      testAreas.area_test_02.dialogue.conversation.area_02_text_03.battle,
       { entityManager }
     ));
   });
