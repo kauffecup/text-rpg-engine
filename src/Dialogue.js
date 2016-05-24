@@ -147,22 +147,10 @@ export default class Dialogue {
     return this.requiresItem() ? entityIDs.indexOf(this.conversation[this.progress].requiredItem) > -1 : true;
   }
 
-  /** See if this we're at a conversation point that requires an item */
-  requiresItem(textKey) {
-    const conversation = this.conversation[textKey];
+  /** See if we're at a conversation point that requires an item */
+  requiresItem() {
+    const conversation = this.conversation[this.progress];
     return !!conversation && !!conversation.requiredItem;
-  }
-
-  /**
-   * Returns true if player meets all requirements to enter the text state matching the key textKey, false otherwise
-   */
-  meetsRequirements(textKey, player) {
-    const textStateToCheck = this.conversation[textKey];
-    if (!textStateToCheck || !textStateToCheck.requiredItem) {
-      return true;
-    }
-    const playerItems = player.getAllEntities() || [];
-    return this.requiresItem() ? playerItems.indexOf(this.conversation[textKey].requiredItem) > -1 : true;
   }
 
   /**
