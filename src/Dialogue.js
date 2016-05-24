@@ -1,6 +1,13 @@
 import createRegex from './helpers/createRegex';
 import Battle from './Battle';
 
+// the dialoge JSON config can optionally specify "complete" as a key in its
+// progression map. i.e. if a user enters the magic words, they complete the
+// dialogue. when this goes down we will use that to determine if the dialogue
+// is in its completed state. alternatively, if a dialgue specifies no
+// progression map, it is also assumed to be complete.
+const COMPLETE_KEY = 'complete';
+
 /**
  * A Dialogue class
  * Maintains the progress in a conversation and handles advancing. Also handles
@@ -15,6 +22,8 @@ export default class Dialogue {
     this.completeText = props.completeText;
     this.completeHelp = props.completeHelp;
     this.completeDrops = props.completeDrops || {};
+    this.progression = props.progression;
+    this.resetKey = props.resetKey;
   }
 
   /**
@@ -35,7 +44,7 @@ export default class Dialogue {
    * Restart the dialogue!
    */
   restart() {
-    this.progress = 0;
+    this.progress = this.resetKey;
   }
 
   /**
@@ -47,16 +56,40 @@ export default class Dialogue {
   }
 
   /**
-   * When executing the user's input, check against all possible choices and
-   * return true or false depending on if we have received a match.
+   * Progress the current text state and any associated battle.
+   * @return - the next conversation key if the input was dandy, false if otherwise
    */
   execute(input, respond, player) {
     if (this.isBattle()) {
-      return this._handleBattle(input, respond, player);
+      if (this._handleBattle(input, respond, player)) {
+        // for battles, progression is an id string, not a map
+        return this.conversation[this.progress].progression;
+      }
+      return false;
     }
-    return createRegex(this.conversation[this.progress].aliases, false).test(input);
+    return this.getNextTextKey(input);
   }
 
+  /**
+   * Given user input, evaluate and return the key of the next text state
+   * NOTE: If the user input matches multiple regexes,the first one in the list will be used
+   *
+   * @input - string that prompted the conversation progression
+   * @return - Key name of the next text state in this.conversation, or false if
+   *            no appropriate state is found
+   */
+  getNextTextKey(input) {
+    const progressionMap = this.conversation[this.progress].progression;
+    for (const key in progressionMap) {
+      if (progressionMap.hasOwnProperty(key)) {
+        // Make a regex from the progression map entry and check user input against it
+        if (createRegex(progressionMap[key]).test(input)) {
+          return key;
+        }
+      }
+    }
+    return false;
+  }
   /**
    * Returns whether or not the current progression point is a battle
    */
@@ -120,14 +153,26 @@ export default class Dialogue {
     return !!conversation && !!conversation.requiredItem;
   }
 
-  /** To advance the conversation, simply increase our progress state */
-  advanceConversation() {
-    this.progress = Math.min(this.progress + 1, this.conversation.length);
+  /**
+  * Set the active text state as the state matching nextTextKey
+  * @param nextTextKey - key name of the text state to go to
+  * @return - true if successful, false otherwise (should never happen unless there's a typo)
+  */
+  advanceConversation(textKey) {
+    if (textKey === COMPLETE_KEY || this.conversation.hasOwnProperty(textKey)) {
+      this.progress = textKey;
+      return true;
+    }
+    return false;
   }
 
-  /** Return whether or not this dialogue is complete */
+  /**
+   * Is the dialogue at an ending state (one with no possible progression)
+   * @return - true if the conversation has no possible progressions, false otherwise
+   */
   isComplete() {
-    return this.progress === this.conversation.length;
+    const conversation = this.conversation[this.progress];
+    return (this.progress === COMPLETE_KEY) || (!conversation || !conversation.progression);
   }
 
   /** Simple getter */

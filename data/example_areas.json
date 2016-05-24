@@ -2,23 +2,39 @@
   "area_01": {
     "description": "example 01",
     "dialogue": {
-      "progress": 0,
-      "conversation": [{
-        "description": "example 01 conversation 01",
-        "helpText": "example 01 help 01",
-        "aliases": ["one", "1"]
-      }, {
-        "description": "example 01 conversation 02",
-        "helpText": "example 01 help 02",
-        "aliases": ["two", "2"]
-      }, {
-        "description": "example 01 conversation 03",
-        "helpText": "example 01 help 03",
-        "aliases": ["three", "3"],
-        "completeDrops": {
-          "key_example_01_02": 1
+      "progress": "area01_text01",
+      "resetKey": "area01_text01",
+      "conversation": {
+        "area01_text01": {
+          "description": "example 01 conversation 01",
+          "helpText": "example 01 help 01",
+          "progression": {
+            "area01_text01": ["goto1", "goto same", "1"],
+            "area01_text02": ["goto2", "goto next", "2"],
+            "area01_text03": ["goto3", "goto last", "3"]
+          }
+        },
+        "area01_text02": {
+          "description": "example 01 conversation 02",
+          "helpText": "example 01 help 02",
+          "aliases": ["two", "2"],
+          "progression": {
+            "area01_text01": ["goto1", "goto back", "1"],
+            "area01_text02": ["goto2", "goto same", "2"],
+            "area01_text03": ["goto3", "goto next", "3"]
+          }
+        },
+        "area01_text03": {
+          "description": "example 01 conversation 03",
+          "helpText": "example 01 help 03 (try going back to 1)",
+          "completeDrops": {
+            "key_example_01_02": 1
+          },
+          "progression": {
+            "complete": ["3", "three", "complete"]
+          }
         }
-      }],
+      },
       "completeText": "example 01 complete",
       "completeHelp": "example 01 complete help"
     },
@@ -29,43 +45,55 @@
       }
     }
   },
-  "area_02": {
+  "area_02":{
     "description": "example 02",
     "dialogue": {
-      "progress": 0,
-      "conversation": [{
-        "description": "example 02 conversation 01",
-        "helpText": "example 02 help 01",
-        "aliases": ["one", "1"]
-      }, {
-        "description": "example 02 battle 01",
-        "helpText": "battle 01 help",
-        "battle": {
-          "speed": 4,
-          "monsters": {
-            "monster_example_01": 2
+      "progress": "area02_text01",
+      "resetKey": "area02_text01",
+      "conversation": {
+        "area02_text01": {
+          "description": "example 02 conversation 01",
+          "helpText": "example 02 help 01",
+          "progression": {
+            "area02_text02": ["one", "1"]
           }
         },
-        "completeDrops": {
-          "item_example_2": 10
-        }
-      }, {
-        "description": "example 02 conversation 02",
-        "helpText": "example 02 help 02",
-        "aliases": ["two", "2"]
-      }, {
-        "description": "example 02 battle 02",
-        "helpText": "battle 02 help 0",
-        "battle": {
-          "speed": 2,
-          "monsters": {
-            "monster_example_02": 1
+        "area02_text02": {
+          "description": "example 02 battle 01",
+          "helpText": "battle 01 help",
+          "battle": {
+            "speed": 4,
+            "monsters": {
+              "monster_example_01": 2
+            }
+          },
+          "completeDrops": {
+            "item_example_2": 10
+          },
+          "progression": "area02_text03"
+        },
+        "area02_text03": {
+          "description": "example 02 conversation 02",
+          "helpText": "example 02 help 02",
+          "progression": {
+            "area02_text04": ["two", "2"]
           }
         },
-        "completeDrops": {
-          "item_example_2": 20
+        "area02_text04": {
+          "description": "example 02 battle 02",
+          "helpText": "battle 02 help 0",
+          "battle": {
+            "speed": 2,
+            "monsters": {
+              "monster_example_02": 1
+            }
+          },
+          "completeDrops": {
+            "item_example_2": 20
+          },
+          "progression": "complete"
         }
-      }],
+      },
       "completeText": "example 02 complete",
       "completeHelp": "example 02 complete help"
     },

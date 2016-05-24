@@ -16,6 +16,7 @@
   "battlePlayerMiss": "oh noes! you missed!",
   "closeSuccess": "Successfully closed {{doorName}}",
   "clearSave": "wiping save data...",
+  "conversationKeyNotFound": "Conversation key not found, blame the writers",
   "dead": "You can't do anything, silly... you're super dead!",
   "doorClosed": "You've gotta open {{doorName}} first, dingus",
   "doorLocked": "Oh noes! {{doorName}} is locked!",

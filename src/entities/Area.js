@@ -58,9 +58,11 @@ export default class Area extends _EntityWithInventory {
       // if we've made it here, we will try to progress the dialog if it isn't
       // already complete
       if (!this.dialogue.isComplete()) {
-        let shouldAdvance = this.dialogue.execute(input, respond, player);
+        const nextTextKey = this.dialogue.execute(input, respond, player);
+        let shouldAdvance = !!nextTextKey;
         // if the user used the right command (and we're not battling) but doesn't have the correct item, tell them
         const entityIDs = player.getAllEntities() || [];
+        // TODO mid battle returns false so we don't need isbattle,
         if (shouldAdvance && !this.dialogue.isBattle() && this.dialogue.requiresItem() && !this.dialogue.testItems(entityIDs)) {
           shouldAdvance = false;
           respond(strings.missingSomething);
@@ -69,18 +71,25 @@ export default class Area extends _EntityWithInventory {
         // battle, and if an item is required... they've got it! advance the conversation.
         if (shouldAdvance) {
           const drops = this.dialogue.getDrops();
-          this.dialogue.advanceConversation();
-          // if the dialogue is now complete, and there are drop items, add them
-          // to our inventory and notify the user
-          if (drops && Object.keys(drops).length) {
-            for (const itemID in drops) {
-              if (drops.hasOwnProperty(itemID)) {
-                this.addEntity(itemID, drops[itemID]);
-                respond(S(strings.fallToFloor).template({itemName: this.entityManager.get(itemID).name, itemCount: drops[itemID]}).s);
+          const goToSuccess = this.dialogue.advanceConversation(nextTextKey);
+          if (goToSuccess) {
+            // if the dialogue is now complete, and there are drop items, add them
+            // to our inventory and notify the user
+            if (drops && Object.keys(drops).length) {
+              for (const itemID in drops) {
+                if (drops.hasOwnProperty(itemID)) {
+                  this.addEntity(itemID, drops[itemID]);
+                  respond(S(strings.fallToFloor).template({itemName: this.entityManager.get(itemID).name, itemCount: drops[itemID]}).s);
+                }
               }
             }
+            respond(this.dialogue.activate());
+          } else {
+            // Getting here means we tried to goto a text state that doesn't exist in the conversation
+            // AKA mismatched key, check for typos in JSON.
+            // If Jordan ever makes a JSON form for Patrick this should cease to be an issue
+            respond(strings.conversationKeyNotFound);
           }
-          respond(this.dialogue.activate());
         // otherwise, see if the user put in text that we want to yell at them for
         } else if (this.dialogue.executeIncorrect(input)) {
           respond(this.dialogue.getIncorrectText());
