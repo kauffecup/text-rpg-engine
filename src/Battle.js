@@ -188,7 +188,7 @@ export default class Battle {
         // we hit! wound the player. if the player is now dead, handle that,
         // otherwise just notify the current HP
         player.wound();
-        pretty += S(strings.battleMonsterStrike).template({
+        pretty += S(this.gearingUpMonster.attackText || strings.battleMonsterStrike).template({
           monsterName: this.gearingUpMonster.name,
           playerName: this.entityManager.get(this.gearingUpTarget).name,
         }).s;

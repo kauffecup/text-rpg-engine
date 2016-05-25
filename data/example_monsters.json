@@ -10,6 +10,7 @@
     "description": "Another example monster. With more HP!",
     "aliases": ["example monster 2", "em2"],
     "hp": 10,
+    "attackText": "{{monsterName}} takes a swing at {{playerName}}!",
     "weakness": {
       "item_example_3": 2
     }

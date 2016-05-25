@@ -9,6 +9,7 @@ export default class Monster extends _MatchableEntity {
     super(props);
     this.name = props.name;
     this.hp = props.hp;
+    this.attackText = props.attackText;
     this.weaknessMap = props.weakness || {};
     this.entityManager = props.entityManager;
   }
