@@ -187,7 +187,7 @@ export default class Battle {
       if (Math.random() < (player.getDodge() ? MONSTER_HIT_WHILE_PLAYER_DODGE_PROBABILITY : MONSTER_HIT_PROBABILITY)) {
         // we hit! wound the player. if the player is now dead, handle that,
         // otherwise just notify the current HP
-        player.wound();
+        player.wound(this.gearingUpMonster.attack);
         pretty += S(this.gearingUpMonster.attackText || strings.battleMonsterStrike).template({
           monsterName: this.gearingUpMonster.name,
           playerName: this.entityManager.get(this.gearingUpTarget).name,

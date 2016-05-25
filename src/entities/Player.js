@@ -51,10 +51,10 @@ export default class Player extends _EntityWithInventory {
   }
 
   /**
-   * This monster's been hit!
+   * This player's been hit!
    */
-  wound() {
-    this.hp = Math.max(this.hp - 1, 0);
+  wound(attack) {
+    this.hp = Math.max(this.hp - attack, 0);
   }
 
   /**
