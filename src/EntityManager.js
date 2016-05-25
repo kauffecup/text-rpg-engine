@@ -88,6 +88,19 @@ export default class EntityManager {
     return this.entityMap[id].oneOfType;
   }
 
+  /** Given text, return a player object if it is a player and matches the player  */
+  matchPlayer(text) {
+    for (const eID in this.entityMap) {
+      if (this.entityMap.hasOwnProperty(eID)) {
+        const e = this.entityMap[eID];
+        if (e.type === 'players' && e.match(text)) {
+          return e;
+        }
+      }
+    }
+    return null;
+  }
+
   /** Initialize the entity manager to vanilla ice ice baby */
   reload() {
     const reload = clone(this._reload);

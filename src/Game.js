@@ -1,7 +1,9 @@
 import strings     from './Strings.json';
 import commands    from './Commands.json';
-import createRegex from './helpers/createRegex';
 import S           from 'string';
+import createRegex, {
+  multiMatch,
+} from './helpers/createRegex';
 
 const CLEAR_SAVE_REGEX = createRegex(commands.clearSave, false);
 const INVENTORY_REGEX = createRegex(commands.inventory, false);
@@ -15,6 +17,7 @@ const OPEN_REGEX = createRegex(commands.open, true);
 const CLOSE_REGEX = createRegex(commands.close, true);
 const UNLOCK_REGEX = createRegex(commands.unlock, true);
 const TRAVERSE_REGEX = createRegex(commands.traverse, true);
+const REVIVE_REGEX = multiMatch(commands.revive, commands.with);
 
 /**
  * Export a function that takes the entityManager and gameState in addition to
@@ -91,6 +94,14 @@ export default (input, userObj, respond, entityManager, gameState) => {
     const doorAttempt = TRAVERSE_REGEX.exec(input)[1];
     const matchedDoor = currentArea.matchDoor(doorAttempt);
     _handleTraverse(matchedDoor, doorAttempt, respond, entityManager, currentArea, gameState);
+  // revive a player with an item!
+  } else if (REVIVE_REGEX.test(input)) {
+    const results = REVIVE_REGEX.exec(input);
+    const playerAttempt = results[1];
+    const itemAttempt = results[2];
+    const matchedPlayer = entityManager.matchPlayer(playerAttempt);
+    const matchedItemID = player.matchItem(itemAttempt);
+    _handleRevive(player, playerAttempt, matchedPlayer, itemAttempt, matchedItemID, entityManager, respond);
   // if none of these match, delegate the input to the current area
   } else {
     currentArea.execute(input, respond, player);
@@ -255,4 +266,30 @@ const _handleTraverse = (door, doorAttempt, respond, entityManager, currentArea,
       respond(S(strings.doorClosed).template({doorName: door.name}).s);
     }
   }
+};
+
+/** When reviving someone, make sure they exist and are dead, the item exists, and the item can revive */
+const _handleRevive = (player, playerAttempt, matchedPlayer, itemAttempt, matchedItemID, entityManager, respond) => {
+  // first are checks to make sure the attempted text was actually matched
+  if (!matchedItemID) {
+    return respond(S(strings.noItems).template({entityAttempt: itemAttempt}).s);
+  }
+  if (!matchedPlayer) {
+    return respond(S(strings.noPlayer).template({player: playerAttempt}).s);
+  }
+
+  // next are checks to make sure the item is a reviving one, and the player
+  // is actually dead
+  const item = entityManager.get(matchedItemID);
+  if (!item.revive) {
+    return respond(S(strings.notReviveItem).template({item: item.name}));
+  }
+  if (matchedPlayer.getHP() > 0) {
+    return respond(S(strings.notDead).template({player: matchedPlayer.name}).s);
+  }
+
+  // if we've gotten to this point, we know that the current user is holding a
+  // revive item, and they are in fact trying to revive someone! yay!!!!!
+  matchedPlayer.reset();
+  respond(S(strings.revive).template({item: item.name, player: matchedPlayer.name}).s);
 };

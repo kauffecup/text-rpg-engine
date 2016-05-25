@@ -16,6 +16,14 @@ export default class Player extends _EntityWithInventory {
     this.dodging = false;
   }
 
+  /** See if this text matches the player - id, name, or description */
+  match(text) {
+    const lc = text.toLowerCase();
+    return lc === this.name.toLowerCase()
+      || lc === this.description.toLowerCase()
+      || lc === this._id.toLowerCase();
+  }
+
   /** Return an array of the keys a player has */
   getKeys() {
     return this.inventory.getAllOfType('keys');

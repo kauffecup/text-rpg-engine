@@ -7,7 +7,7 @@ import createRegex, {
 } from './helpers/createRegex';
 
 const ATTACK_REGEX = createRegex(commands.attack, true);
-const ATTACK_WITH_REGEX = multiMatch(commands.attack, commands.attackWith);
+const ATTACK_WITH_REGEX = multiMatch(commands.attack, commands.with);
 const DODGE_REGEX = createRegex(commands.dodge, false);
 
 const PLAYER_HIT_PROBABILITY = 0.9;

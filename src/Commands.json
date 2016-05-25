@@ -1,13 +1,13 @@
 {
   "attack": ["attack", "hit", "slap", "punch", "kick", "smack"],
-  "attackWith": ["with", "using", "on"],
+  "with": ["with", "using", "on"],
   "clearSave": ["clear save"],
   "close": ["close", "shut"],
   "dodge": ["dodge"],
   "drop": ["drop item", "put down", "drop", "lose", "ditch", "let go of", "release"],
-  "groupInventory": ["group inventory", "group items", "party inventory", "party items", "what do we have", "who has the item", "group backpack"],
+  "groupInventory": ["group inventory", "group status", "group items", "party inventory", "party items", "what do we have", "who has the item", "group backpack"],
   "help": ["help"],
-  "inventory": ["inventory", "check inventory", "items", "what do i have", "backpack", "what’s in my pocket"],
+  "inventory": ["inventory", "status", "check inventory", "items", "what do i have", "backpack", "what’s in my pocket"],
   "location": ["where am i", "where are we", "where is this", "where the hill are we"],
   "inspect": ["look at", "check", "inspect", "what is", "describe"],
   "look": ["look at", "look", "what's here", "peer", "observe", "look around", "what's around"],
@@ -15,6 +15,8 @@
   "open": ["open"],
   "pickup": ["pickup", "pick up", "take", "grab", "loot"],
   "repeat": ["repeat", "remind", "say what"],
+  "revive": ["revive", "awaken"],
   "traverse": ["walk through", "go through", "enter", "travel through"],
-  "unlock": ["unlock"]
+  "unlock": ["unlock"],
+  "with": ["with", "using", "on"]
 }
