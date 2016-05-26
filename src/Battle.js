@@ -113,7 +113,15 @@ export default class Battle {
           // aha! we found a match! let's hurt this bad boi and append our pretty string
           found = true;
           monster.wound(matchedWeapon);
-          pretty += S(strings.battlePlayerHitSuccess).template({monsterName: monster.name}).s;
+          if (matchedWeapon) {
+            const weapon = this.entityManager.get(matchedWeapon);
+            pretty += S(weapon.hitSuccessText || strings.battlePlayerHitSuccessWeapon).template({
+              monsterName: monster.name,
+              weaponName: weapon.name,
+            }).s;
+          } else {
+            pretty += S(strings.battlePlayerHitSuccess).template({monsterName: monster.name}).s;
+          }
           // if this monster is now dead, we remove it from our monsters array
           // also if that monster was "gearing up" we clear it. deads can't attack!
           if (monster.getHP() === 0) {

@@ -16,6 +16,7 @@ export default class Item extends _MatchableEntity {
     this.oneOfTypeAliases = props.oneOfTypeAliases;
     this.attack = props.attack;
     this.revive = props.revive;
+    this.hitSuccessText = props.hitSuccessText;
   }
 
   /** @override _MatchableEntity - include super method || matching a oneOfTypeAliases */

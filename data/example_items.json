@@ -25,9 +25,10 @@
   },
   "item_example_5": {
     "name": "Example Weapon",
-    "description": "you can add attack to items",
+    "description": "you can add attack and custom hit success text to items",
     "aliases": ["example weapon"],
-    "attack": 2
+    "attack": 2,
+    "hitSuccessText": "The {{monsterName}} was nailed with {{weaponName}}."
   },
   "item_example_6": {
     "name": "Revive Item",
