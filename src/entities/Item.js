@@ -1,4 +1,5 @@
 import _MatchableEntity from './_MatchableEntity';
+import createRegex from '../helpers/createRegex';
 
 /**
  * Our Item Class. (extends _MatchableEntity) and has a name. Can also specify
@@ -12,7 +13,14 @@ export default class Item extends _MatchableEntity {
     super(props);
     this.name = props.name;
     this.oneOfType = props.oneOfType;
+    this.oneOfTypeAliases = props.oneOfTypeAliases;
     this.attack = props.attack;
     this.revive = props.revive;
+  }
+
+  /** @override _MatchableEntity - include super method || matching a oneOfTypeAliases */
+  match(input) {
+    return super.match(input) || (this.oneOfTypeAliases && this.oneOfTypeAliases.length ?
+      createRegex(this.oneOfTypeAliases, false).test(input) : false);
   }
 }

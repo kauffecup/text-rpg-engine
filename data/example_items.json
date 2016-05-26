@@ -13,12 +13,14 @@
     "name": "First Example One of Type",
     "description": "If you specify 'oneOfType' then only one of those items can be in a given player's inventory",
     "oneOfType": "mattDamon",
+    "oneOfTypeAliases": ["matt", "damon", "matt damon"],
     "aliases": ["ei3"]
   },
   "item_example_4": {
     "name": "Second Exaple One of Type",
     "description": "Because this has the same oneOfType as item_example_4, a player can't have both",
     "oneOfType": "mattDamon",
+    "oneOfTypeAliases": ["matt", "damon", "matt damon"],
     "aliases": ["ei4"]
   },
   "item_example_5": {
