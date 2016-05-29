@@ -1,8 +1,8 @@
 import Slack                from 'slack-client';
 import main, { initialize } from '../src/main';
 import env                  from '../env';
-import loadData             from './_loadDataLocal';
-import { save, load, clearSave } from './_saveLocal';
+import loadData             from './_loadDataDropbox';
+import { save, load, clearSave } from './_saveCloudant';
 
 // Automatically reconnect after an error response from Slack
 const AUTO_RECCONECT = true;
