@@ -6,7 +6,10 @@ import createRegex from '../helpers/createRegex';
  * "oneOfType" on multiple items. When this happens, there can only be one of
  * that type of item in the Player's inventory. For example, if there are
  * multiple item's whose `oneOfType` === 'mattdamon', the player could only
- * have one of them in his/her inventory at a given time.
+ * have one of them in his/her inventory at a given time. If this is the case,
+ * there can also be a "oneOfTypeAliases" which affects the matching logic.
+ *
+ * "attack" and "revive" are used for battle properties along with "hitSuccessText"
  */
 export default class Item extends _MatchableEntity {
   constructor(props) {

@@ -1,7 +1,8 @@
 import _MatchableEntity from './_MatchableEntity';
 
 /**
- * Our Key Class. (extends _MatchableEntity) and has a name
+ * Our Monster Class. (extends _MatchableEntity) and has a name, hp, attack,
+ * attackText (optional), and weaknessMap (optional)
  */
 export default class Monster extends _MatchableEntity {
   constructor(props) {

@@ -3,6 +3,7 @@
 ## Configuring
 
 The game is entirely configurable via the JSON files under the `data` directory.
+There are example files in this repo to help you get started.
 
 ### `keys.json`
 
@@ -12,7 +13,7 @@ Lists all keys. Keys are fairly simple objects that look like:
 "key_door_02_03": {
   "name": "steel key",
   "description": "its handle is shaped like a book",
-  "choices": ["steel key", "the steel key"]
+  "aliases": ["steel key", "the steel key"]
 }
 ```
 
@@ -25,13 +26,17 @@ Lists all doors. Doors look like:
   "name": "the library door",
   "description": "the library door",
   "areas": ["area_02", "area_03"],
-  "choices": ["library door", "the library door", "library", "the library"],
+  "aliases": ["library door", "the library door", "library", "the library"],
   "locked": 1,
   "key": "key_door_02_03",
   "doorLockedText": "The door won’t budge, but you hear angry muttering from inside the door. Something about losing his keys. Maybe you can find them?",
   "doorOpenText": "Hooray! The archives are open for business! Let’s see what’s inside."
 }
 ```
+
+`doorLockedText`, `doorOpenText`, and `key` are optional. `doorLockedText` is
+custom text that prints when trying to open that locked door. `doorOpenText`
+is custom text that prints when the door is unlocked/opened.
 
 ### `items.json`
 
@@ -41,45 +46,141 @@ Lists all items. Items are fairly simple objects that look like:
 "item_coin": {
   "name": "Coin",
   "description": "This might come in handy later...",
-  "choices": ["coin"]
+  "aliases": ["coin"]
 }
 ```
 
+To add for more fun scenarios, you can specify a `oneOfType`. When multiple
+items have the same `oneOfType`, a player can only hold one of those at a time.
+When this is the case, you can also specify a `oneOfTypeAliases` array (that
+behaves the same as the regular `aliases` array) to allow for easier access.
+If there are a bunch of one-of-type `swords`, then a player can just say `sword`
+to get the job done.
+
+Items can also be used as weapons. When doing this you can specify an `attack`
+property that acts as that item's attack. The syntax in the battle would be:
+
+```
+attack|hit|slap|punch|kick|smack {{monsterName}} with|using|on {{weapon alias}}
+```
+
+An item can also be used to revive someone who is dead. To do this, set
+`revive:true` in the item's json.
+
+This can be used via:
+
+```
+revive|awaken|use {{item}} with|using|on {{player}}
+```
+
+### `monsters.json`
+
+Monsters describe a monster used in a battle:
+
+```json
+"monster_scarecrow": {
+  "name": "Scarecrow",
+  "description": "A Scarecrow",
+  "aliases": ["scarecrow"],
+  "hp": 10,
+  "attack": 3,
+  "attackText": "{{monsterName}} slashes with its pole towards {{playerName}}!",
+  "weakness": {
+    "item_blue_wand": 2,
+    "item_orange_wand": 2
+  }
+}
+```
+
+Note that monsters can optionally specify an `attack`, custom `attackText`, and
+`weakness`es to given items. Thus if a player attacks with one of those items,
+that monster will receive more damage. This is currently implemented via a
+multiplier of `itemAttack` * `monsterWeaknessToThatItem`.
+
 ### `areas.json`
 
-Areas are where the meat happens. Here's a rather complicated example:
+Areas are where the meat happens:
 
 ```json
 "area_04": {
   "description": "a description",
   "lookText": "text thats printed when the user says look",
   "dialogue": {
-    "progress": 0,
-    "conversation": [{
-      "description": "the first part of the conversation",
-      "helpText": "help text for the first part of the conversation",
-      "choices": ["user inputs", "that will", "progress the", "conversation"]
-    }, {
-      "description": "the next part of the conversation",
-      "helpText": "help text for the next part",
-      "choices": ["etc"],
-      "completeDrops": {
-        "item_coin": 10,
-        "key_03_04": 1,
+    "progress": "area_04_01",
+    "resetKey": "area_04_01",
+    "conversation": {
+      "area_04_01": {
+        "description": "the first part of the conversation",
+        "helpText": "help text for the first part of the conversation",
+        "progression": {
+          "area_04_02": ["user inputs", "that will", "progress the", "conversation"]
+        }
+      },
+      "area_04_02": {
+        "description": "the next part of the conversation",
+        "helpText": "help text for the next part",
+        "progression": {
+          "area_04_01": ["etc"],
+          "area_04_03": ["other", "things"]
+        },
+      },
+      "area_04_3": {
+        "description": "Oh noes! you're being attacked!",
+        "helpText": "Try attacking the monsters",
+        "battle": {
+          "speed": 3,
+          "monsters": {
+            "monster_monster": 5
+          }
+        },
+        "completeDrops": {
+          "key_door_04_05": 1
+        },
+        "progression": "complete"
       }
-    }],
+    },
     "completeText": "text that prints when the user finishes the conversation",
     "completeHelp": "text that prints when the user types help when the conversation is done"
+  },
+  "inventory": {
+    "items": {
+      "item_coin": 10
+    }
   },
   "doors": ["door_03_04", "door_04_05"]
 }
 ```
 
+Ok, so what's going on here. The `description` for an area is printed when the
+user enters that area. The `look` text is printed whenever the user executes
+any of the Commands.look commands. Areas are connected by doors and can have
+their own inventory.
+
+Dialogue describes the progression of text puzzles/battles in a given area. The
+bulk of this description happens via the `conversation` object. Each key in this
+object points to a sub-object of the conversation. When that part of the
+conversation is triggered, the `description` text prints. If the user types
+`help`, the `helpText` prints for that given convo-part. Conversations can
+either be linear or branch - and all of this is described via `progression`.
+`progression` is itself an object - the keys point to conversation keys and
+the values are arrays of accepted commands. This allows you to describe "by
+typing one of x you go here and by typing one of y you go there." In turn you
+can have circular convos allowing for complex logic puzzles.
+
+A sub-conversation object can also specify a battle. Battles have a `speed`
+property and an object describing what monsters are present. The `progression`
+for a battle can only be single valued - when you complete a battle this
+automatically puts the user in the next part of the conversation.
+
+At any point you can specify that the user goes to the "complete" stage. In this
+stage the area is "done" and the `completeText` prints. `completeHelp` prints
+if the user types help.
+
 All the "stock" strings used in the game are described in `src/Strings.json`,
 and all acceptable commands are defined in `src/Commands.json`.
 
-Everything with a `choices` array uses the regex under `src/helpers/createRegex`
-- even the commands.
+Everything with an `aliases` array uses the regex under
+`src/helpers/createRegex` - even the commands.
 
 ## Code Structure
 
@@ -127,10 +228,40 @@ area, and an array of door ids that are in the area. All of this is described
 in the config file `data/areas.json`. The items are maintained in an `Inventory`
 class which is also used by `Player`.
 
+Areas initialize a `Dialogue` when they are created. `Dialogue` maintains the
+logic for progressing through the conversation, and initializing a battle if
+there is one.
+
+### `Battle`
+
+Right now the battle mechanics are rather simple. First, a speed property is
+specified in the areas.json. That speed dictates after however many player
+actions, a monster will act. Currently player actions are only `attack` and
+`dodge` and monster actions are `target` and `attack`. For example, if the
+speed is 1, the battle will look like:
+
+```sh
+player attacks monster
+monster targets player
+player dodges
+monster attacks
+```
+
+Monsters attack players based on how often players have attacked. For example,
+if there are 3 players, and p1 has attacked 10 times, while p2 and p3 have each
+attacked 5 times, player 1 has a 50% chance of being targeted, while p2 and p3
+have a 25% chance of being targeted.
+
 ### `Player`
 
 Maintains an `Inventory` for the given Player. Maybe one day this'll be more
 complicated.
+
+### `Monster`
+
+Monsters are enemies that can attack players. The logic for the actual attacking
+is handled by `Battle` but each monster object maintains its HP, and attack
+power.
 
 ### `Door`
 

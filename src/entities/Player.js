@@ -3,7 +3,8 @@ import strings              from '../Strings.json';
 
 /**
  * A Player class
- * Maintains that players inventory and whether or not player is an admin
+ * Maintains that players inventory and whether or not player is an admin.
+ * Also maintains the players hp and maxHP and dodging state for battle logic.
  */
 export default class Player extends _EntityWithInventory {
   constructor(props) {
