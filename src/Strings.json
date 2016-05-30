@@ -41,6 +41,7 @@
   "openSuccess": "Successfully opened {{doorName}}",
   "pickupSuccess": "Successfully picked up {{itemName}}",
   "revive": "Through the grace of {{item}}, you successfully revived {{player}}!",
+  "takeSuccess": "Successfully took {{itemName}} from {{player}}",
   "unlockFailed": "Dang, you couldn’t unlock it! Try using a better key, or perhaps someone else has the right one.",
   "unlockSuccess": "Successfully unlocked {{doorName}} using {{keyName}}",
   "unrecognizedText": "I'm sorry, I don't recognize {{textString}}"

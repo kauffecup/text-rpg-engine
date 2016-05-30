@@ -4,3 +4,4 @@ SLACK_TOKEN.json
 saveData
 coverage
 VCAP_SERVICES.json
+ENV_VARS.json

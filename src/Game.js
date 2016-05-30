@@ -18,6 +18,7 @@ const CLOSE_REGEX = createRegex(commands.close, true);
 const UNLOCK_REGEX = createRegex(commands.unlock, true);
 const TRAVERSE_REGEX = createRegex(commands.traverse, true);
 const REVIVE_REGEX = multiMatch(commands.revive, commands.with);
+const TAKE_REGEX = multiMatch(commands.take, commands.takeFrom);
 
 /**
  * Export a function that takes the entityManager and gameState in addition to
@@ -38,11 +39,19 @@ export default (input, userObj, respond, entityManager, gameState) => {
     gameState.addPlayer(userObj._id);
   }
 
-  // this is a dangerous one, make sure player is an admin
+  // if the player is an admin they can clear save data
   if (player.isAdmin && CLEAR_SAVE_REGEX.test(input)) {
     entityManager.reload();
     gameState.clearSave();
     respond(strings.clearSave);
+  // if the player is an admin, they can steal items
+  } else if (player.isAdmin && TAKE_REGEX.test(input)) {
+    const results = TAKE_REGEX.exec(input);
+    const itemAttempt = results[1];
+    const playerAttempt = results[2];
+    const matchedPlayer = entityManager.matchPlayer(playerAttempt);
+    const matchedItemID = matchedPlayer && matchedPlayer.matchItem(itemAttempt);
+    _handleTake(player, playerAttempt, matchedPlayer, itemAttempt, matchedItemID, entityManager, respond);
   // list the entire groups inventory
   } else if (GROUP_INVENTORY_REGEX.test(input)) {
     _handleGroupInventory(gameState, entityManager, respond);
@@ -114,6 +123,24 @@ export default (input, userObj, respond, entityManager, gameState) => {
     players.map(p => p.reset());
   }
   gameState.save();
+};
+
+/** Take an item from a player */
+const _handleTake = (player, playerAttempt, matchedPlayer, itemAttempt, matchedItemID, entityManager, respond) => {
+  // first are checks to make sure the attempted text was actually matched
+  if (!matchedPlayer) {
+    return respond(S(strings.noPlayer).template({player: playerAttempt}).s);
+  }
+  if (!matchedItemID) {
+    return respond(S(strings.noItems).template({entityAttempt: itemAttempt}).s);
+  }
+
+  matchedPlayer.removeEntity(matchedItemID, 1);
+  player.addEntity(matchedItemID, 1);
+  respond(S(strings.takeSuccess).template({
+    itemName: entityManager.get(matchedItemID).name,
+    player: matchedPlayer.name,
+  }).s);
 };
 
 /** When entering an area, activate it and add it to our game state */

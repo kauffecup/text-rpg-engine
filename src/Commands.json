@@ -16,6 +16,8 @@
   "pickup": ["pickup", "pick up", "take", "grab", "loot"],
   "repeat": ["repeat", "remind", "say what"],
   "revive": ["revive", "awaken", "use"],
+  "take": ["take", "steal"],
+  "takeFrom": ["from"],
   "traverse": ["walk through", "go through", "enter", "travel through"],
   "unlock": ["unlock"],
   "with": ["with", "using", "on"]
