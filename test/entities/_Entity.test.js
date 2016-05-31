@@ -1,5 +1,5 @@
-import expect  from 'expect';
-import _Entity from '../../src/entities/_Entity';
+const expect = require('expect');
+const _Entity = require('../../src/entities/_Entity');
 
 describe('_Entity', () => {
   it('sets _id, description, and type', () => {

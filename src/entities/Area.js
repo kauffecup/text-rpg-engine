@@ -1,9 +1,9 @@
-import _EntityWithInventory from './_EntityWithInventory';
-import Dialogue             from '../Dialogue';
-import createRegex          from '../helpers/createRegex';
-import strings              from '../Strings.json';
-import commands             from '../Commands.json';
-import S                    from 'string';
+const _EntityWithInventory = require('./_EntityWithInventory');
+const Dialogue = require('../Dialogue');
+const createRegex = require('../helpers/createRegex');
+const strings = require('../Strings.json');
+const commands = require('../Commands.json');
+const S = require('string');
 
 const HELP_REGEX = createRegex(commands.help, false);
 const LOOK_REGEX = createRegex(commands.look, false);
@@ -13,7 +13,7 @@ const REPEAT_REGEX = createRegex(commands.repeat, false);
  * An Area class
  * Maintains the area's dialogue, items, and doors
  */
-export default class Area extends _EntityWithInventory {
+module.exports = class Area extends _EntityWithInventory {
   constructor(props) {
     super(props);
     // from areas.json
@@ -145,4 +145,4 @@ export default class Area extends _EntityWithInventory {
       this.inventory.load(props.inventory);
     }
   }
-}
+};

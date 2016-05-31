@@ -1,6 +1,5 @@
-import expect      from 'expect';
-import createRegex from '../src/helpers/createRegex';
-
+const expect = require('expect');
+const createRegex = require('../src/helpers/createRegex');
 
 describe('createRegex', () => {
   let MY_REGEX;

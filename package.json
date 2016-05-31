@@ -2,15 +2,14 @@
   "name": "text-rpg",
   "version": "2.0.0",
   "scripts": {
-    "local": "babel-node ./adapters/adapterLocal.js",
-    "slack": "babel-node ./adapters/adapterSlack.js",
+    "local": "node ./adapters/adapterLocal.js",
+    "slack": "node ./adapters/adapterSlack.js",
     "nodered": "node-red -v --settings adapters/adapterNodeRed.js",
-    "test": "istanbul cover _mocha -- --recursive --compilers js:babel-core/register",
+    "test": "istanbul cover _mocha -- --recursive",
     "lint": "eslint --ignore-path .gitignore .",
     "pretest": "npm run lint"
   },
   "dependencies": {
-    "babel": "^5.8.23",
     "bluebird": "^3.1.1",
     "clone": "^1.0.2",
     "cloudant": "^1.4.0",
@@ -20,12 +19,14 @@
     "string": "^3.3.1"
   },
   "devDependencies": {
-    "babel-core": "~5.8.33",
     "eslint": "^1.10.3",
     "eslint-config-airbnb": "^1.0.2",
     "eslint-plugin-react": "^3.13.1",
     "expect": "^1.13.4",
     "istanbul": "^0.4.1",
     "mocha": "^2.3.4"
+  },
+  "engines": {
+    "node": ">6.1.x"
   }
 }

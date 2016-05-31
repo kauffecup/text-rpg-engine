@@ -1,9 +1,8 @@
-import strings     from './Strings.json';
-import commands    from './Commands.json';
-import S           from 'string';
-import createRegex, {
-  multiMatch,
-} from './helpers/createRegex';
+const strings = require('./Strings.json');
+const commands = require('./Commands.json');
+const S = require('string');
+const createRegex = require('./helpers/createRegex');
+const { multiMatch } = createRegex;
 
 const CLEAR_SAVE_REGEX = createRegex(commands.clearSave, false);
 const INVENTORY_REGEX = createRegex(commands.inventory, false);
@@ -30,7 +29,7 @@ const TAKE_REGEX = multiMatch(commands.take, commands.takeFrom);
  * interactions that happen between the user and the area or the user and a
  * door.
  */
-export default (input, userObj, respond, entityManager, gameState) => {
+module.exports = (input, userObj, respond, entityManager, gameState) => {
   const currentArea = entityManager.get(gameState.getCurrentArea()) || _enterArea('area_01', respond, gameState, entityManager);
   let player = entityManager.get(userObj._id);
   if (!player) {

@@ -1,7 +1,6 @@
-import expect from 'expect';
-import EntityManager from '../src/entityManager';
-import testItems from './data/testItems.json';
-
+const expect = require('expect');
+const EntityManager = require('../src/entityManager');
+const testItems = require('./data/testItems.json');
 
 describe('EntityManager', () => {
   let entityManager;

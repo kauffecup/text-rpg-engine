@@ -3,7 +3,7 @@
  * Maintains what the player or party of players has accomplished. Handles
  * saving and loading.
  */
-export default class State {
+module.exports = class State {
   constructor(props) {
     this.entityManager = props.entityManager;
     this.visitedAreas = [];
@@ -119,4 +119,4 @@ export default class State {
       }
     }
   }
-}
+};

@@ -1,8 +1,9 @@
-import Slack                from 'slack-client';
-import main, { initialize } from '../src/main';
-import env                  from '../env';
-import loadData             from './_loadDataDropbox';
-import { save, load, clearSave } from './_saveCloudant';
+const Slack = require('slack-client');
+const main = require('../src/main');
+const { initialize } = main;
+const env = require('../env');
+const loadData = require('./_loadDataDropbox');
+const { save, load, clearSave } = require('./_saveCloudant');
 
 // Automatically reconnect after an error response from Slack
 const AUTO_RECCONECT = true;

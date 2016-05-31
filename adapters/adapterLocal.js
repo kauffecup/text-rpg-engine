@@ -1,7 +1,8 @@
-import { createInterface }  from 'readline';
-import main, { initialize } from '../src/main';
-import loadData             from './_loadDataLocal';
-import { save, load, clearSave } from './_saveLocal';
+const { createInterface } = require('readline');
+const main = require('../src/main');
+const { initialize } = main;
+const loadData = require('./_loadDataLocal');
+const { save, load, clearSave } = require('./_saveLocal');
 
 /** Our read line object */
 const rl = createInterface({

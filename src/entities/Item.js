@@ -1,5 +1,5 @@
-import _MatchableEntity from './_MatchableEntity';
-import createRegex from '../helpers/createRegex';
+const _MatchableEntity = require('./_MatchableEntity');
+const createRegex = require('../helpers/createRegex');
 
 /**
  * Our Item Class. (extends _MatchableEntity) and has a name. Can also specify
@@ -11,7 +11,7 @@ import createRegex from '../helpers/createRegex';
  *
  * "attack" and "revive" are used for battle properties along with "hitSuccessText"
  */
-export default class Item extends _MatchableEntity {
+module.exports = class Item extends _MatchableEntity {
   constructor(props) {
     super(props);
     this.name = props.name;
@@ -27,4 +27,4 @@ export default class Item extends _MatchableEntity {
     return super.match(input) || (this.oneOfTypeAliases && this.oneOfTypeAliases.length ?
       createRegex(this.oneOfTypeAliases, false).test(input) : false);
   }
-}
+};

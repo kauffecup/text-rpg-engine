@@ -5,7 +5,7 @@
  *   description: ...a description
  *   type: the type of this entity
  */
-export default class Entity {
+module.exports = class Entity {
   constructor(props = {}) {
     this._id = props._id;
     this.description = props.description;
@@ -28,4 +28,4 @@ export default class Entity {
    * this is equal to the return from toJSON.
    */
   load() {}
-}
+};

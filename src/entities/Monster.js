@@ -1,10 +1,10 @@
-import _MatchableEntity from './_MatchableEntity';
+const _MatchableEntity = require('./_MatchableEntity');
 
 /**
  * Our Monster Class. (extends _MatchableEntity) and has a name, hp, attack,
  * attackText (optional), and weaknessMap (optional)
  */
-export default class Monster extends _MatchableEntity {
+module.exports = class Monster extends _MatchableEntity {
   constructor(props) {
     props.aliases = [props.name].concat(props.aliases);
     super(props);
@@ -39,4 +39,4 @@ export default class Monster extends _MatchableEntity {
   describe() {
     return `${this.name}: _${this.description}_\nHP: ${this.hp}\n`;
   }
-}
+};

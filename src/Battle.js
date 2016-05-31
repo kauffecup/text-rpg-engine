@@ -1,10 +1,9 @@
-import Monster     from './entities/Monster';
-import commands    from './Commands.json';
-import strings     from './Strings.json';
-import S           from 'string';
-import createRegex, {
-  multiMatch,
-} from './helpers/createRegex';
+const Monster = require('./entities/Monster');
+const commands = require('./Commands.json');
+const strings = require('./Strings.json');
+const S = require('string');
+const createRegex = require('./helpers/createRegex');
+const { multiMatch } = createRegex;
 
 const ATTACK_REGEX = createRegex(commands.attack, true);
 const ATTACK_WITH_REGEX = multiMatch(commands.attack, commands.with);
@@ -19,7 +18,7 @@ const MONSTER_HIT_WHILE_PLAYER_DODGE_PROBABILITY = 0.1;
  * Maintains the Battle state. How many monsters, their hit points, who they're
  * targeting, when they attack, interpreting the user's attacks, etc.
  */
-export default class Battle {
+module.exports = class Battle {
   constructor(props) {
     this.entityManager = props.entityManager;
     // speed is probably the wrong word, because this is the opposite... can
@@ -250,4 +249,4 @@ export default class Battle {
     }
     return pretty;
   }
-}
+};

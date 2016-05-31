@@ -1,5 +1,5 @@
-import expect               from 'expect';
-import _MatchableEntity from '../../src/entities/_MatchableEntity';
+const expect = require('expect');
+const _MatchableEntity = require('../../src/entities/_MatchableEntity');
 
 describe('_MatchableEntity', () => {
   let myEntity;

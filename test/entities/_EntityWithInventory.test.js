@@ -1,9 +1,9 @@
-import expect               from 'expect';
-import _EntityWithInventory from '../../src/entities/_EntityWithInventory';
-import Inventory            from '../../src/Inventory';
-import EntityManager        from '../../src/entityManager';
-import testItems            from '../data/testItems.json';
-import testKeys             from '../data/testKeys.json';
+const expect = require('expect');
+const _EntityWithInventory = require('../../src/entities/_EntityWithInventory');
+const Inventory = require('../../src/Inventory');
+const EntityManager = require('../../src/entityManager');
+const testItems = require('../data/testItems.json');
+const testKeys = require('../data/testKeys.json');
 
 describe('_EntityWithInventory', () => {
   let entityManager;

@@ -1,6 +1,6 @@
-import expect from 'expect';
-import State  from '../src/State';
-import EntityManager from '../src/EntityManager';
+const expect = require('expect');
+const State = require('../src/State');
+const EntityManager = require('../src/EntityManager');
 
 describe('State', () => {
   let gameState;

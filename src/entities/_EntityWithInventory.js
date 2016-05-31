@@ -1,10 +1,10 @@
-import _Entity from   './_Entity';
-import Inventory from '../Inventory';
+const _Entity = require('./_Entity');
+const Inventory = require('../Inventory');
 
 /**
  * An entity that maintains an inventory w/ helper methods
  */
-export default class _EntityWithInventory extends _Entity {
+module.exports = class _EntityWithInventory extends _Entity {
   constructor(props) {
     super(props);
     this.entityManager = props.entityManager;
@@ -41,4 +41,4 @@ export default class _EntityWithInventory extends _Entity {
   removeEntity(entityID, count) {
     return this.inventory.remove(entityID, count);
   }
-}
+};

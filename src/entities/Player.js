@@ -1,12 +1,12 @@
-import _EntityWithInventory from './_EntityWithInventory';
-import strings              from '../Strings.json';
+const _EntityWithInventory = require('./_EntityWithInventory');
+const strings = require('../Strings.json');
 
 /**
  * A Player class
  * Maintains that players inventory and whether or not player is an admin.
  * Also maintains the players hp and maxHP and dodging state for battle logic.
  */
-export default class Player extends _EntityWithInventory {
+module.exports = class Player extends _EntityWithInventory {
   constructor(props) {
     super(props);
     this.name = props.name;
@@ -107,4 +107,4 @@ export default class Player extends _EntityWithInventory {
       this.inventory.load(props.inventory);
     }
   }
-}
+};

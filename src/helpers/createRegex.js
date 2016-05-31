@@ -9,7 +9,7 @@
  * of the input string. In the above example "silly matt damon" would not be
  * matched.
  */
-export default (commandArray, capture) => {
+module.exports = (commandArray, capture) => {
   return new RegExp(`^(?:${commandArray.map(s => s.replace('+', '\\+')).join('|')})` + (capture ? ' (.*)' : ''), 'i');
 };
 
@@ -21,8 +21,8 @@ export default (commandArray, capture) => {
  *   2) An array for what's accepted between the 1st and 2nd blank
  * The 1st blank will be in capturing group 1, the 2nd blank will be in group 2
  */
-export function multiMatch(commandArray, joinArray) {
+module.exports.multiMatch = (commandArray, joinArray) => {
   const cmdArr = commandArray.map(s => s.replace('+', '\\+'));
   const jonArr = joinArray.map(s => s.replace('+', '\\+'));
   return new RegExp(`^(?:${cmdArr.join('|')}) (.+) (?:${jonArr.join('|')}) (.+)`, 'i');
-}
+};

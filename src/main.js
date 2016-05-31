@@ -1,6 +1,6 @@
-import game          from './Game';
-import EntityManager from './EntityManager';
-import State         from './State';
+const game = require('./Game');
+const EntityManager = require('./EntityManager');
+const State = require('./State');
 
 let entityManager;
 let gameState;
@@ -20,7 +20,7 @@ let gameState;
  * For example, when running in the console, the input will be what's typed
  * into stdin and the respond function is console.log.
  */
-export default (input, userObj, respond) => {
+module.exports = (input, userObj, respond) => {
   game(input, userObj, respond, entityManager, gameState);
 };
 
@@ -34,7 +34,7 @@ export default (input, userObj, respond) => {
  * entityProm is a promise that resolves with JSON objects that are to be loaded
  * into the EntityManager.
  */
-export const initialize = (save, loadProm, clearSave, entityProm) => {
+module.exports.initialize = (save, loadProm, clearSave, entityProm) => {
   return entityProm.then(({items, areas, doors, keys, monsters}) => {
     /** Initialize the entity manager with the items and areas and doors etc */
     entityManager = new EntityManager();

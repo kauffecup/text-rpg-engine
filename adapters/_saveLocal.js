@@ -1,7 +1,7 @@
-import Promise from 'bluebird';
-import fs      from 'fs';
-import path    from 'path';
-import del     from 'del';
+const Promise = require('bluebird');
+const fs = require('fs');
+const path = require('path');
+const del = require('del');
 
 /** Helper constants for our save data */
 const AREA_PATH = '../saveData/saved_areas.json';
@@ -10,7 +10,7 @@ const PLAYER_PATH = '../saveData/saved_players.json';
 const CURRENT_AREA_PATH = '../saveData/saved_current_area.json';
 
 /** When loading, load areas, doors, and players */
-export const load = () => {
+module.exports.load = () => {
   return new Promise((resolve) => {
     const saveData = {};
     try {
@@ -30,7 +30,7 @@ export const load = () => {
 };
 
 /** Aggregate area, door, and player data and save it to disc */
-export const save = ({players, doors, areas, currentArea}) => {
+module.exports.save = ({players, doors, areas, currentArea}) => {
   // Make sure the saveData directory exists
   try {
     fs.mkdirSync(path.resolve(__dirname, '../saveData'));
@@ -45,7 +45,7 @@ export const save = ({players, doors, areas, currentArea}) => {
 };
 
 /** To clear the save data, just delete the directory */
-export const clearSave = () => {
+module.exports.clearSave = () => {
   return del(['./saveData/**']);
 };
 

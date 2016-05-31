@@ -1,5 +1,5 @@
-import createRegex from './helpers/createRegex';
-import Battle from './Battle';
+const createRegex = require('./helpers/createRegex');
+const Battle = require('./Battle');
 
 // the dialoge JSON config can optionally specify "complete" as a key in its
 // progression map. i.e. if a user enters the magic words, they complete the
@@ -13,7 +13,7 @@ const COMPLETE_KEY = 'complete';
  * Maintains the progress in a conversation and handles advancing. Also handles
  * access to the conversation strings - description/help/complete
  */
-export default class Dialogue {
+module.exports = class Dialogue {
   constructor(props) {
     // described in areas.json:
     this.progress = props.progress;
@@ -191,4 +191,4 @@ export default class Dialogue {
   load(props) {
     this.progress = props.progress || 0;
   }
-}
+};

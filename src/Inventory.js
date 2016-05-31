@@ -3,7 +3,7 @@
  * Contains methods for managing entities in an inventory. Maintains which
  * entities we've got, what they're type is, and how many.
  */
-export default class Inventory {
+module.exports = class Inventory {
   /**
    * Initialize our Inventory
    * Required prop: entityManager
@@ -114,4 +114,4 @@ export default class Inventory {
   load(inventory) {
     this.inventory = inventory;
   }
-}
+};

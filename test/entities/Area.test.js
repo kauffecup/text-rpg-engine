@@ -1,7 +1,8 @@
-import expect, {spyOn}   from 'expect';
-import Area     from '../../src/entities/Area';
-import Dialogue from '../../src/Dialogue';
-import areas    from '../data/testAreas.json';
+const expect = require('expect');
+const { spyOn } = expect;
+const Area = require('../../src/entities/Area');
+const Dialogue = require('../../src/Dialogue');
+const areas = require('../data/testAreas.json');
 
 describe('Area', () => {
   let area;

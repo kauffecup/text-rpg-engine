@@ -1,12 +1,12 @@
-import Cloudant from 'cloudant';
-import Promise  from 'bluebird';
-import env      from '../env';
+const Cloudant = require('cloudant');
+const Promise = require('bluebird');
+const env = require('../env');
 
 /** A promisified, initialized cloudant client object */
 const cloudant = Promise.promisifyAll(Cloudant(env.CLOUDANT_URL).use(env.CLOUDANT_DB_NAME));
 
 /** When loading, load areas, doors, and players */
-export const load = () => {
+module.exports.load = () => {
   return new Promise.join(
     cloudant.viewAsync(env.CLOUDANT_DESIGN_DOC, 'areas'),
     cloudant.viewAsync(env.CLOUDANT_DESIGN_DOC, 'players'),
@@ -28,7 +28,7 @@ export const load = () => {
 };
 
 /** Aggregate area, door, and player data and save it to our database */
-export const save = ({players, doors, areas, currentArea}) => {
+module.exports.save = ({players, doors, areas, currentArea}) => {
   return cloudant.listAsync({}).then(({rows}) => {
     // once we have the rev#s we build a map of _id->_rev for fast lookup
     const idToRevMap = {};
@@ -64,7 +64,7 @@ export const save = ({players, doors, areas, currentArea}) => {
 };
 
 /** Clear everything from our views */
-export const clearSave = () => {
+module.exports.clearSave = () => {
   return new Promise.join(
     cloudant.viewAsync(env.CLOUDANT_DESIGN_DOC, 'areas'),
     cloudant.viewAsync(env.CLOUDANT_DESIGN_DOC, 'players'),

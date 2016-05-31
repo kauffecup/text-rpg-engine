@@ -1,13 +1,13 @@
-import _MatchableEntity from './_MatchableEntity';
-import strings          from '../Strings.json';
-import S                from 'string';
+const _MatchableEntity = require('./_MatchableEntity');
+const strings = require('../Strings.json');
+const S = require('string');
 
 /**
  * A Door class
  * Maintains its a description, what areas it connects, whether or not it's
  * locked and what key unlocks it
  */
-export default class Door extends _MatchableEntity {
+module.exports = class Door extends _MatchableEntity {
   constructor(props) {
     super(props);
     // described in doors.json
@@ -88,4 +88,4 @@ export default class Door extends _MatchableEntity {
       this.locked = props.locked;
     }
   }
-}
+};

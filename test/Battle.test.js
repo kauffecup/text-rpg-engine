@@ -1,10 +1,10 @@
-import expect        from 'expect';
-import Battle        from '../src/Battle';
-import Monster       from '../src/entities/Monster';
-import EntityManager from '../src/entityManager';
-import testAreas     from './data/testAreas.json';
-import testItems     from './data/testItems.json';
-import testMonsters  from './data/testMonsters.json';
+const expect = require('expect');
+const Battle = require('../src/Battle');
+const Monster = require('../src/entities/Monster');
+const EntityManager = require('../src/entityManager');
+const testAreas = require('./data/testAreas.json');
+const testItems = require('./data/testItems.json');
+const testMonsters = require('./data/testMonsters.json');
 
 describe('Battle', () => {
   let battle;

@@ -35,4 +35,4 @@ envVars.CLOUDANT_URL = VCAP_SERVICES.cloudantNoSQLDB[0].credentials.url;
 envVars.CLOUDANT_DB_NAME = 'text_rpg_db';
 envVars.CLOUDANT_DESIGN_DOC = 'text_rpg_design';
 
-export default envVars;
+module.exports = envVars;

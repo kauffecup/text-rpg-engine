@@ -1,4 +1,4 @@
-import Promise from 'bluebird';
+const Promise = require('bluebird');
 
 export default () => new Promise(resolve => {
   const items = require('../data/example_items.json');

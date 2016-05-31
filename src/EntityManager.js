@@ -1,9 +1,9 @@
-import Item    from './entities/Item';
-import Area    from './entities/Area';
-import Player  from './entities/Player';
-import Door    from './entities/Door';
-import Key     from './entities/Key';
-import clone   from 'clone';
+const Item = require('./entities/Item');
+const Area = require('./entities/Area');
+const Player = require('./entities/Player');
+const Door = require('./entities/Door');
+const Key = require('./entities/Key');
+const clone = require('clone');
 
 const DEFAULT_PLAYER_HP = 5;
 
@@ -21,7 +21,7 @@ const _typeMap = {
  * Can load in entities of a certain type, retrieve entities, and retrieve
  * entity types.
  */
-export default class EntityManager {
+module.exports = class EntityManager {
   /** Initialize our entityMap */
   constructor() {
     this.entityMap = {};
@@ -110,4 +110,4 @@ export default class EntityManager {
       this.load(type, entities);
     }
   }
-}
+};
