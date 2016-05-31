@@ -128,15 +128,15 @@ module.exports = (input, userObj, respond, entityManager, gameState) => {
 const _handleTake = (player, playerAttempt, matchedPlayer, itemAttempt, matchedItemID, entityManager, respond) => {
   // first are checks to make sure the attempted text was actually matched
   if (!matchedPlayer) {
-    return respond(S(strings.noPlayer).template({player: playerAttempt}).s);
+    return respond(S(strings.noPlayer).template({ player: playerAttempt }).s);
   }
   if (!matchedItemID) {
-    return respond(S(strings.noItems).template({entityAttempt: itemAttempt}).s);
+    return respond(S(strings.noItems).template({ entityAttempt: itemAttempt }).s);
   }
 
   matchedPlayer.removeEntity(matchedItemID, 1);
   player.addEntity(matchedItemID, 1);
-  respond(S(strings.takeSuccess).template({
+  return respond(S(strings.takeSuccess).template({
     itemName: entityManager.get(matchedItemID).name,
     player: matchedPlayer.name,
   }).s);
@@ -176,13 +176,13 @@ const _handleItemPickup = (itemID, entityAttempt, entityManager, player, current
     // if the add succeeded, remove it from the area and notify the user
     if (player.addEntity(itemID, 1)) {
       currentArea.removeEntity(itemID, 1);
-      respond(S(strings.pickupSuccess).template({itemName: item.name}).s);
+      respond(S(strings.pickupSuccess).template({ itemName: item.name }).s);
     // otherwise tell them they can only have one of that type (the only way add will fail)
     } else {
-      respond(S(strings.oneOfTypeError).template({itemName: item.name, oneOfType: item.oneOfType}).s);
+      respond(S(strings.oneOfTypeError).template({ itemName: item.name, oneOfType: item.oneOfType }).s);
     }
   } else {
-    respond(S(strings.noItems).template({entityAttempt: entityAttempt}).s);
+    respond(S(strings.noItems).template({ entityAttempt }).s);
   }
 };
 
@@ -191,9 +191,9 @@ const _handleItemDrop = (itemID, entityAttempt, entityManager, player, currentAr
   if (itemID) {
     player.removeEntity(itemID, 1);
     currentArea.addEntity(itemID, 1);
-    respond(S(strings.dropSuccess).template({itemName: entityManager.get(itemID).name}).s);
+    respond(S(strings.dropSuccess).template({ itemName: entityManager.get(itemID).name }).s);
   } else {
-    respond(S(strings.noItems).template({entityAttempt: entityAttempt}).s);
+    respond(S(strings.noItems).template({ entityAttempt }).s);
   }
 };
 
@@ -202,13 +202,13 @@ const _handleInspect = (itemID, entityAttempt, entityManager, respond) => {
   if (itemID) {
     respond(entityManager.get(itemID).description);
   } else {
-    respond(S(strings.unrecognizedText).template({textString: entityAttempt}).s);
+    respond(S(strings.unrecognizedText).template({ textString: entityAttempt }).s);
   }
 };
 /** Helper method used by open/close/unlock */
 const _validateDoor = (door, doorAttempt, respond) => {
   if (!door) {
-    respond(S(strings.noDoor).template({doorAttempt: doorAttempt}).s);
+    respond(S(strings.noDoor).template({ doorAttempt }).s);
   }
   return !!door;
 };
@@ -223,18 +223,18 @@ const _handleDoorOpen = (door, player, doorAttempt, respond, entityManager) => {
         _handleDoorUnlock(door, player, doorAttempt, respond, entityManager);
       // otherwise tell them its locked!
       } else {
-        respond(door.doorLockedText || S(strings.doorLocked).template({doorName: door.name}).s);
+        respond(door.doorLockedText || S(strings.doorLocked).template({ doorName: door.name }).s);
       }
     }
     // if the door is now unlocked, open it and respopnd
     if (door.getStatus() === 0) {
       door.open();
       if (door.getStatus() === -1) {
-        respond(door.doorOpenText || S(strings.openSuccess).template({doorName: door.name}).s);
+        respond(door.doorOpenText || S(strings.openSuccess).template({ doorName: door.name }).s);
       }
     // if the door is already open, tell the user they're dumb
     } else if (door.getStatus() === -1) {
-      respond(S(strings.alreadyOpen).template({doorName: door.name}).s);
+      respond(S(strings.alreadyOpen).template({ doorName: door.name }).s);
     }
   }
 };
@@ -244,12 +244,12 @@ const _handleDoorClose = (door, doorAttempt, respond) => {
   if (_validateDoor(door, doorAttempt, respond)) {
     // if the door is locked or closed, you can't close it again!
     if (door.getStatus() >= 0) {
-      respond(S(strings.alreadyClosed).template({doorName: door.name}).s);
+      respond(S(strings.alreadyClosed).template({ doorName: door.name }).s);
     // otherwise... close it and notify the user
     } else if (door.getStatus() === -1) {
       door.close();
       if (door.getStatus() === 0) {
-        respond(S(strings.closeSuccess).template({doorName: door.name}).s);
+        respond(S(strings.closeSuccess).template({ doorName: door.name }).s);
       }
     }
   }
@@ -260,7 +260,7 @@ const _handleDoorUnlock = (door, player, doorAttempt, respond, entityManager) =>
   if (_validateDoor(door, doorAttempt, respond)) {
     // if the door is already unlocked tell the user they're dumb
     if (door.getStatus() < 1) {
-      respond(S(strings.alreadyUnlocked).template({doorName: door.name}).s);
+      respond(S(strings.alreadyUnlocked).template({ doorName: door.name }).s);
     } else {
       // if the user has keys, see if one of them can unlock the door
       const keyIDs = player.getKeys().map(k => Object.keys(k)[0]);
@@ -268,7 +268,7 @@ const _handleDoorUnlock = (door, player, doorAttempt, respond, entityManager) =>
       // if the unlock succeeded, get rid of the key and notify the user
       if (keyUsed && door.getStatus() < 1) {
         player.removeEntity(keyUsed, 1);
-        respond(S(strings.unlockSuccess).template({doorName: door.name, keyName: entityManager.get(keyUsed).name}).s);
+        respond(S(strings.unlockSuccess).template({ doorName: door.name, keyName: entityManager.get(keyUsed).name }).s);
       // otherwise the unlock was not successful
       } else {
         respond(door.doorLockedText || strings.unlockFailed);
@@ -286,10 +286,10 @@ const _handleTraverse = (door, doorAttempt, respond, entityManager, currentArea,
       _enterArea(newAreaID, respond, gameState, entityManager);
     // if the door is locked tell the user
     } else if (door.getStatus() > 0) {
-      respond(door.doorLockedText || S(strings.doorLocked).template({doorName: door.name}).s);
+      respond(door.doorLockedText || S(strings.doorLocked).template({ doorName: door.name }).s);
     // if the door is closed tell the user
     } else {
-      respond(S(strings.doorClosed).template({doorName: door.name}).s);
+      respond(S(strings.doorClosed).template({ doorName: door.name }).s);
     }
   }
 };
@@ -298,24 +298,24 @@ const _handleTraverse = (door, doorAttempt, respond, entityManager, currentArea,
 const _handleRevive = (player, playerAttempt, matchedPlayer, itemAttempt, matchedItemID, entityManager, respond) => {
   // first are checks to make sure the attempted text was actually matched
   if (!matchedItemID) {
-    return respond(S(strings.noItems).template({entityAttempt: itemAttempt}).s);
+    return respond(S(strings.noItems).template({ entityAttempt: itemAttempt }).s);
   }
   if (!matchedPlayer) {
-    return respond(S(strings.noPlayer).template({player: playerAttempt}).s);
+    return respond(S(strings.noPlayer).template({ player: playerAttempt }).s);
   }
 
   // next are checks to make sure the item is a reviving one, and the player
   // is actually dead
   const item = entityManager.get(matchedItemID);
   if (!item.revive) {
-    return respond(S(strings.notReviveItem).template({item: item.name}));
+    return respond(S(strings.notReviveItem).template({ item: item.name }));
   }
   if (matchedPlayer.getHP() > 0) {
-    return respond(S(strings.notDead).template({player: matchedPlayer.name}).s);
+    return respond(S(strings.notDead).template({ player: matchedPlayer.name }).s);
   }
 
   // if we've gotten to this point, we know that the current user is holding a
   // revive item, and they are in fact trying to revive someone! yay!!!!!
   matchedPlayer.reset();
-  respond(S(strings.revive).template({item: item.name, player: matchedPlayer.name}).s);
+  return respond(S(strings.revive).template({ item: item.name, player: matchedPlayer.name }).s);
 };

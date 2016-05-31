@@ -33,6 +33,7 @@ module.exports = class Door extends _MatchableEntity {
     } else if (index === 1) {
       return this.areas[0];
     }
+    return null;
   }
 
   /**
@@ -45,6 +46,7 @@ module.exports = class Door extends _MatchableEntity {
       this.locked = 0;
       return this.key;
     }
+    return null;
   }
 
   /** If the door is unlocked, open it */
@@ -65,13 +67,13 @@ module.exports = class Door extends _MatchableEntity {
   describe() {
     let status;
     if (this.locked < 0) {
-      status = S(strings.doorStatusOpen).template({doorDescription: this.description}).s;
+      status = S(strings.doorStatusOpen).template({ doorDescription: this.description }).s;
     } else if (this.locked > 0) {
-      status = S(strings.doorStatusLocked).template({doorDescription: this.description}).s;
+      status = S(strings.doorStatusLocked).template({ doorDescription: this.description }).s;
     } else {
-      status = S(strings.doorStatusClosed).template({doorDescription: this.description}).s;
+      status = S(strings.doorStatusClosed).template({ doorDescription: this.description }).s;
     }
-    return this.name + ( status ? ': ' + status : '');
+    return this.name + (status ? `:  ${status}` : '');
   }
 
   /** Only need to save the things the user can mutate - locked state */

@@ -8,11 +8,11 @@ const dropboxClient = Promise.promisifyAll(new Dropbox.Client({
   secret: env.DROPBOX_SECRET,
 }));
 dropboxClient.authDriver(new Dropbox.AuthDriver.NodeServer(8191));
-dropboxClient.setCredentials({token: env.DROPBOX_ACCESS_TOKEN});
+dropboxClient.setCredentials({ token: env.DROPBOX_ACCESS_TOKEN });
 
-module.exports = () => {
+module.exports = () =>
   // step 2, read in the json files and parse them
-  return dropboxClient.authenticateAsync({interactive: false}).then(client =>
+  dropboxClient.authenticateAsync({ interactive: false }).then(client =>
     Promise.join(
       client.readFileAsync('/worldofiocraft/chapter_02/areas.json'),
       client.readFileAsync('/worldofiocraft/chapter_02/doors.json'),
@@ -30,4 +30,3 @@ module.exports = () => {
   ).catch(e => {
     console.error(e);
   });
-};

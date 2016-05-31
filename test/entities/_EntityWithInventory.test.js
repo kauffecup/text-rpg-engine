@@ -1,7 +1,7 @@
 const expect = require('expect');
 const _EntityWithInventory = require('../../src/entities/_EntityWithInventory');
 const Inventory = require('../../src/Inventory');
-const EntityManager = require('../../src/entityManager');
+const EntityManager = require('../../src/EntityManager');
 const testItems = require('../data/testItems.json');
 const testKeys = require('../data/testKeys.json');
 

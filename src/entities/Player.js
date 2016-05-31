@@ -85,7 +85,7 @@ module.exports = class Player extends _EntityWithInventory {
   describe() {
     let pretty = this.name ? `*${this.name} (${this.description})*` : `*${this.description}*`;
     pretty += `  HP: ${this.hp}` + (this.getDodge() ? ' (dodging)\n' : '\n');
-    return pretty + (this.inventory.describe() || strings.nothingInventory + '\n');
+    return pretty + (this.inventory.describe() || `${strings.nothingInventory}\n`);
   }
 
   /** The data we save for this player */

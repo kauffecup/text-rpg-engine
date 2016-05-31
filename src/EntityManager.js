@@ -59,12 +59,12 @@ module.exports = class EntityManager {
       }
     }
     // store a reference in case we want to wipe the entity manager
-    this._reload.push({type, entities});
+    this._reload.push({ type, entities });
   }
 
   /** Like load... but for a player, also it returns it. */
   loadPlayer(props) {
-    const newProps = Object.assign({hp: DEFAULT_PLAYER_HP, maxHP: DEFAULT_PLAYER_HP}, props, {
+    const newProps = Object.assign({ hp: DEFAULT_PLAYER_HP, maxHP: DEFAULT_PLAYER_HP }, props, {
       entityManager: this,
       type: 'players',
     });
@@ -106,7 +106,7 @@ module.exports = class EntityManager {
     const reload = clone(this._reload);
     this.entityMap = {};
     this._reload = [];
-    for (const {type, entities} of reload) {
+    for (const { type, entities } of reload) {
       this.load(type, entities);
     }
   }

@@ -4,7 +4,7 @@ const _MatchableEntity = require('../../src/entities/_MatchableEntity');
 describe('_MatchableEntity', () => {
   let myEntity;
   beforeEach(() => {
-    myEntity = new _MatchableEntity({aliases: ['tesla', 'test damon']});
+    myEntity = new _MatchableEntity({ aliases: ['tesla', 'test damon'] });
   });
 
   it('instantiates choices upon creation', () => {

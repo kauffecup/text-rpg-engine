@@ -25,6 +25,7 @@ module.exports = class _EntityWithInventory extends _Entity {
         return itemID;
       }
     }
+    return null;
   }
 
   /** Return an array of ids in this entity's inventory */

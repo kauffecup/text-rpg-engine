@@ -34,8 +34,8 @@ module.exports = (input, userObj, respond) => {
  * entityProm is a promise that resolves with JSON objects that are to be loaded
  * into the EntityManager.
  */
-module.exports.initialize = (save, loadProm, clearSave, entityProm) => {
-  return entityProm.then(({items, areas, doors, keys, monsters}) => {
+module.exports.initialize = (save, loadProm, clearSave, entityProm) =>
+  entityProm.then(({ items, areas, doors, keys, monsters }) => {
     /** Initialize the entity manager with the items and areas and doors etc */
     entityManager = new EntityManager();
     entityManager.load('items', items);
@@ -47,4 +47,3 @@ module.exports.initialize = (save, loadProm, clearSave, entityProm) => {
     gameState = new State({ entityManager, save, loadProm, clearSave });
     return gameState.load();
   });
-};

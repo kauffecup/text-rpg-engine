@@ -6,14 +6,16 @@ const _MatchableEntity = require('./_MatchableEntity');
  */
 module.exports = class Monster extends _MatchableEntity {
   constructor(props) {
-    props.aliases = [props.name].concat(props.aliases);
-    super(props);
-    this.name = props.name;
-    this.hp = props.hp;
-    this.attack = props.attack || 1;
-    this.attackText = props.attackText;
-    this.weaknessMap = props.weakness || {};
-    this.entityManager = props.entityManager;
+    const newProps = Object.assign({}, props, {
+      aliases: [props.name].concat(props.aliases),
+    });
+    super(newProps);
+    this.name = newProps.name;
+    this.hp = newProps.hp;
+    this.attack = newProps.attack || 1;
+    this.attackText = newProps.attackText;
+    this.weaknessMap = newProps.weakness || {};
+    this.entityManager = newProps.entityManager;
   }
 
   /**

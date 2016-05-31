@@ -9,9 +9,8 @@
  * of the input string. In the above example "silly matt damon" would not be
  * matched.
  */
-module.exports = (commandArray, capture) => {
-  return new RegExp(`^(?:${commandArray.map(s => s.replace('+', '\\+')).join('|')})` + (capture ? ' (.*)' : ''), 'i');
-};
+module.exports = (commandArray, capture) =>
+  new RegExp(`^(?:${commandArray.map(s => s.replace('+', '\\+')).join('|')})${(capture ? ' (.*)' : '')}`, 'i');
 
 /**
  * A slightly more complicated helper function for matching and capturing a

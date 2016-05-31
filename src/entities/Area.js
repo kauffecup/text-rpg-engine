@@ -79,7 +79,7 @@ module.exports = class Area extends _EntityWithInventory {
               for (const itemID in drops) {
                 if (drops.hasOwnProperty(itemID)) {
                   this.addEntity(itemID, drops[itemID]);
-                  respond(S(strings.fallToFloor).template({itemName: this.entityManager.get(itemID).name, itemCount: drops[itemID]}).s);
+                  respond(S(strings.fallToFloor).template({ itemName: this.entityManager.get(itemID).name, itemCount: drops[itemID] }).s);
                 }
               }
             }
@@ -106,11 +106,12 @@ module.exports = class Area extends _EntityWithInventory {
         return door;
       }
     }
+    return null;
   }
 
   /** Helper method that returns a string describing the state of the area */
   _describe() {
-    let here = this.lookText ? this.lookText + '\n' : '';
+    let here = this.lookText ? `${this.lookText}\n` : '';
     if (this.doors.length) {
       here += '*doors*:\n';
       for (const doorID of this.doors) {

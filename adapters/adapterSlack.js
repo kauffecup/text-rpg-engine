@@ -1,28 +1,26 @@
-const Slack = require('slack-client');
+const RtmClient = require('@slack/client').RtmClient;
 const main = require('../src/main');
 const { initialize } = main;
 const env = require('../env');
 const loadData = require('./_loadDataDropbox');
 const { save, load, clearSave } = require('./_saveCloudant');
 
-// Automatically reconnect after an error response from Slack
-const AUTO_RECCONECT = true;
-// Automatically mark each message as read after it is processed
-const AUTO_MARK = true;
+// event constants
+const CLIENT_EVENTS = require('@slack/client').CLIENT_EVENTS;
+const RTM_EVENTS = require('@slack/client').RTM_EVENTS;
 
 /** Initialize the game */
 initialize(save, load(), clearSave, loadData()).then(() => {
   // initialize slack
-  const slack = new Slack(env.SLACK_TOKEN, AUTO_RECCONECT, AUTO_MARK);
+  const rtm = new RtmClient(env.SLACK_TOKEN, { autoReconnect: true, autoMark: true });
   // Once everything's good to go, set up our event listener and get started
-  slack.on('open', () => {
-    console.log(`Connected to ${slack.team.name} as @${slack.self.name}`);
+  rtm.on(CLIENT_EVENTS.RTM.AUTHENTICATED, rtmStartData => {
+    console.log(`Connected to ${rtmStartData.team.name} as @${rtmStartData.self.name}`);
     console.log('potential channels:');
-    const channels = Object.assign({}, slack.channels, slack.groups);
-    // console.log(slack.groups);
+    const channels = Object.assign({}, rtmStartData.channels, rtmStartData.groups);
     for (const channelKey in channels) {
       if (channels.hasOwnProperty(channelKey)) {
-        const {id, name, is_archived: isArchived, is_channel: isChannel, is_group: isGroup, is_member: isMember} = channels[channelKey];
+        const { id, name, is_archived: isArchived, is_channel: isChannel, is_group: isGroup, is_member: isMember } = channels[channelKey];
         if (!isArchived && (isChannel || isGroup)) {
           console.log(`${name}: ${id}  ${isMember ? 'member' : 'not in channel'}`);
         }
@@ -31,10 +29,10 @@ initialize(save, load(), clearSave, loadData()).then(() => {
   });
 
   // when we receive a message pass it on to our main function
-  slack.on('message', ({text, user, channel}) => {
+  rtm.on(RTM_EVENTS.MESSAGE, ({ text, user, channel }) => {
     if (channel === env.SLACK_CHANNEL_ID) {
-      const channelObj = slack.getChannelGroupOrDMByID(channel);
-      const userObj = slack.getUserByID(user);
+      const channelObj = rtm.dataStore.getChannelGroupOrDMById(channel);
+      const userObj = rtm.dataStore.getUserById(user);
       // format our user object to pass into the main function
       const ourUser = {
         _id: userObj && userObj.id,
@@ -43,7 +41,7 @@ initialize(save, load(), clearSave, loadData()).then(() => {
         isAdmin: userObj && env.SLACK_ADMINS.indexOf(userObj.id) > -1,
       };
       // our main response game function
-      const respond = t => channelObj.send(t);
+      const respond = t => rtm.sendMessage(t, channelObj.id);
       // only execute main stuff if the slack message wasn't from da bot
       if (user && userObj && userObj.name.toLowerCase() !== 'dm') {
         main(text, ourUser, respond);
@@ -52,10 +50,10 @@ initialize(save, load(), clearSave, loadData()).then(() => {
   });
 
   // error handling yo
-  slack.on('error', e => {
+  rtm.on(CLIENT_EVENTS.RTM.WS_ERROR, e => {
     console.error(e);
   });
 
   // now we log in!
-  slack.login();
+  rtm.start();
 });

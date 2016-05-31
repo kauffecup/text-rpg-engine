@@ -10,8 +10,8 @@ const PLAYER_PATH = '../saveData/saved_players.json';
 const CURRENT_AREA_PATH = '../saveData/saved_current_area.json';
 
 /** When loading, load areas, doors, and players */
-module.exports.load = () => {
-  return new Promise((resolve) => {
+module.exports.load = () =>
+  new Promise((resolve) => {
     const saveData = {};
     try {
       saveData.players = require(PLAYER_PATH);
@@ -27,10 +27,9 @@ module.exports.load = () => {
     } catch (e) {} // eslint-disable-line
     resolve(saveData);
   });
-};
 
 /** Aggregate area, door, and player data and save it to disc */
-module.exports.save = ({players, doors, areas, currentArea}) => {
+module.exports.save = ({ players, doors, areas, currentArea }) => {
   // Make sure the saveData directory exists
   try {
     fs.mkdirSync(path.resolve(__dirname, '../saveData'));
@@ -39,19 +38,17 @@ module.exports.save = ({players, doors, areas, currentArea}) => {
     _write(AREA_PATH, areas),
     _write(DOOR_PATH, doors),
     _write(PLAYER_PATH, players),
-    _write(CURRENT_AREA_PATH, {currentArea: currentArea }),
+    _write(CURRENT_AREA_PATH, { currentArea }),
     () => true
   );
 };
 
 /** To clear the save data, just delete the directory */
-module.exports.clearSave = () => {
-  return del(['./saveData/**']);
-};
+module.exports.clearSave = () => del(['./saveData/**']);
 
 /** Helper method to handle the actual file write */
-const _write = (relativePath, json) => {
-  return new Promise((resolve, reject) => {
+const _write = (relativePath, json) =>
+  new Promise((resolve, reject) => {
     fs.writeFile(path.resolve(__dirname, relativePath), JSON.stringify(json, null, 2), e => {
       if (e) {
         console.error(e);
@@ -61,4 +58,3 @@ const _write = (relativePath, json) => {
       }
     });
   });
-};

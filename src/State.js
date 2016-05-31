@@ -77,7 +77,7 @@ module.exports = class State {
 
   /** Extract the load data from the method passed in during construction and update existing entities */
   load() {
-    return this._loadProm.then(({players = [], doors = [], areas = [], currentArea}) => {
+    return this._loadProm.then(({ players = [], doors = [], areas = [], currentArea }) => {
       /** load players */
       for (const playerJSON of players) {
         this.entityManager.loadPlayer(playerJSON);

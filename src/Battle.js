@@ -70,7 +70,7 @@ module.exports = class Battle {
     // the user is dodging!
     } else if (DODGE_REGEX.test(input)) {
       player.setDodge(true);
-      respond(S(strings.battlePlayerDodgeAttempt).template({playerName: player.name}).s);
+      respond(S(strings.battlePlayerDodgeAttempt).template({ playerName: player.name }).s);
       somethingHappened = true;
     }
     // if the attacks or dodges AND we have monsters AND it's time, strike back
@@ -101,7 +101,7 @@ module.exports = class Battle {
     let pretty = '';
     const matchedWeapon = player.matchItem(weaponAttempt);
     if (!!weaponAttempt && !matchedWeapon) {
-      pretty += S(strings.battleNoWeapon).template({playerName: player.name, weaponAttempt}).s;
+      pretty += S(strings.battleNoWeapon).template({ playerName: player.name, weaponAttempt }).s;
     // first we see if this attack attempt is a hit vs a miss
     } else if (Math.random() < PLAYER_HIT_PROBABILITY) {
       // it's a hit! let's see what we're attempting to hit...
@@ -119,7 +119,7 @@ module.exports = class Battle {
               weaponName: weapon.name,
             }).s;
           } else {
-            pretty += S(strings.battlePlayerHitSuccess).template({monsterName: monster.name}).s;
+            pretty += S(strings.battlePlayerHitSuccess).template({ monsterName: monster.name }).s;
           }
           // if this monster is now dead, we remove it from our monsters array
           // also if that monster was "gearing up" we clear it. deads can't attack!
@@ -128,10 +128,10 @@ module.exports = class Battle {
               this.gearingUpMonster = null;
             }
             this.monsters.splice(i, 1);
-            pretty += ' ' + S(strings.battlePlayerHitFatal).template({monsterName: monster.name}).s;
+            pretty += ' ' + S(strings.battlePlayerHitFatal).template({ monsterName: monster.name }).s;
           // if it's just been hurt, append the current HP onto our pretty string
           } else {
-            pretty += ' ' + S(strings.battleHPRemaining).template({HP: monster.getHP()}).s;
+            pretty += ' ' + S(strings.battleHPRemaining).template({ HP: monster.getHP() }).s;
           }
         }
       }
@@ -145,7 +145,7 @@ module.exports = class Battle {
     }
     // the player tried to do something, they aint dodgin no more
     if (player.getDodge()) {
-      pretty += '\n' + S(strings.battlePlayerLoseDodge).template({playerName: player.name}).s;
+      pretty += '\n' + S(strings.battlePlayerLoseDodge).template({ playerName: player.name }).s;
     }
     player.setDodge(false);
     // respond with the prettiest string everrrr.
@@ -200,18 +200,18 @@ module.exports = class Battle {
           playerName: this.entityManager.get(this.gearingUpTarget).name,
         }).s;
         if (player.getHP() === 0) {
-          pretty += ' ' + S(strings.battleMonsterStrikeFatal).template({playerName: player.name}).s;
+          pretty += ' ' + S(strings.battleMonsterStrikeFatal).template({ playerName: player.name }).s;
           this.handlePlayerDeath(this.gearingUpTarget);
         } else {
-          pretty += ' ' + S(strings.battleHPRemaining).template({HP: player.getHP()}).s;
+          pretty += ' ' + S(strings.battleHPRemaining).template({ HP: player.getHP() }).s;
         }
       // our monster missed
       } else {
-        pretty += S(strings.battleMonsterMiss).template({monsterName: this.gearingUpMonster.name}).s;
+        pretty += S(strings.battleMonsterMiss).template({ monsterName: this.gearingUpMonster.name }).s;
       }
       // the player aint dodgin no more
       if (player.getDodge()) {
-        pretty += '\n' + S(strings.battlePlayerLoseDodge).template({playerName: player.name}).s;
+        pretty += '\n' + S(strings.battlePlayerLoseDodge).template({ playerName: player.name }).s;
       }
       player.setDodge(false);
       // clear this so that we hit the other logic next time

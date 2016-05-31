@@ -1,5 +1,5 @@
 const expect = require('expect');
-const EntityManager = require('../src/entityManager');
+const EntityManager = require('../src/EntityManager');
 const Inventory = require('../src/Inventory');
 const testItems = require('./data/testItems.json');
 const testKeys = require('./data/testKeys.json');
@@ -61,7 +61,7 @@ describe('Inventory', () => {
   it('can get all entities of a given type', () => {
     inventory.add('item_test_1', 1);
     inventory.add('item_test_2', 7);
-    expect(inventory.getAllOfType('items')).toEqual([{item_test_1: 1}, {item_test_2: 7}]);
+    expect(inventory.getAllOfType('items')).toEqual([{ item_test_1: 1 }, { item_test_2: 7 }]);
   });
 
   it('can get all IDs in an inventory', () => {

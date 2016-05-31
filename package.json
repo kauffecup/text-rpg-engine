@@ -4,27 +4,29 @@
   "scripts": {
     "local": "node ./adapters/adapterLocal.js",
     "slack": "node ./adapters/adapterSlack.js",
-    "nodered": "node-red -v --settings adapters/adapterNodeRed.js",
+    "debug-local": "node-debug ./adapters/adapterLocal.js",
+    "debug-slack": "node-debug ./adapters/adapterSlack.js",
     "test": "istanbul cover _mocha -- --recursive",
     "lint": "eslint --ignore-path .gitignore .",
     "pretest": "npm run lint"
   },
   "dependencies": {
-    "bluebird": "^3.1.1",
+    "@slack/client": "^3.3.0",
+    "bluebird": "^3.4.0",
     "clone": "^1.0.2",
-    "cloudant": "^1.4.0",
+    "cloudant": "^1.4.1",
     "dropbox": "^0.10.3",
-    "node-red": "^0.13.0",
-    "slack-client": "^1.5.1",
     "string": "^3.3.1"
   },
   "devDependencies": {
-    "eslint": "^1.10.3",
-    "eslint-config-airbnb": "^1.0.2",
-    "eslint-plugin-react": "^3.13.1",
-    "expect": "^1.13.4",
-    "istanbul": "^0.4.1",
-    "mocha": "^2.3.4"
+    "eslint": "^2.11.1",
+    "eslint-config-airbnb": "^9.0.1",
+    "eslint-plugin-import": "^1.8.1",
+    "eslint-plugin-jsx-a11y": "^1.2.2",
+    "eslint-plugin-react": "^5.1.1",
+    "expect": "^1.20.1",
+    "istanbul": "^0.4.3",
+    "mocha": "^2.5.3"
   },
   "engines": {
     "node": ">6.1.x"

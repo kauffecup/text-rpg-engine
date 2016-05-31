@@ -19,7 +19,7 @@ const userObj = {
 };
 
 /** Our respond function - used to print out game stuff */
-const respond = text => console.log('>>> ' + text);
+const respond = text => console.log(`>>> ${text}`);
 
 /** Initialize the game */
 initialize(save, load(), clearSave, loadData()).then(() => {

@@ -1,5 +1,5 @@
 const expect = require('expect');
-const EntityManager = require('../src/entityManager');
+const EntityManager = require('../src/EntityManager');
 const testItems = require('./data/testItems.json');
 
 describe('EntityManager', () => {
