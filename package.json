@@ -1,7 +1,6 @@
 {
   "name": "text-rpg",
-  "version": "1.0.0",
-  "private": true,
+  "version": "2.0.0",
   "scripts": {
     "local": "babel-node ./adapters/adapterLocal.js",
     "slack": "babel-node ./adapters/adapterSlack.js",
