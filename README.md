@@ -335,7 +335,7 @@ This way both the local and slack adapters can share these.
 To run locally (after running a good ol' `npm i` of course):
 
 ```sh
-npm start
+npm run local
 ```
 
 To run on Slack:
