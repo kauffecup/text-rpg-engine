@@ -1,6 +1,6 @@
 const Promise = require('bluebird');
 
-export default () => new Promise(resolve => {
+module.exports = () => new Promise(resolve => {
   const items = require('../data/example_items.json');
   const areas = require('../data/example_areas.json');
   const doors = require('../data/example_doors.json');
